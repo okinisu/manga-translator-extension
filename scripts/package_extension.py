@@ -8,10 +8,10 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 RUNTIME = '''manifest.json popup.html popup.css popup.js review.html review.js ui.css
-ui-i18n.js core.js text-core.js collage-core.js batch-store.js background.js
+pi-client.js ui-i18n.js core.js text-core.js collage-core.js batch-store.js background.js
 comic.js chat.js automation.js gemini-dom.js detector.js detector-worker.js gpu-io-core.js
 CPU-MODEL-OPTIMIZATION.json GPU-MODEL-OPTIMIZATION.json postprocess-core.js pixel-core.js performance-core.js crop-worker.js episode-cache.js debug-core.js debug-ui.js debug.css
-PRIVACY.md THIRD_PARTY_NOTICES.md README.md README.en.md MODEL.md CHANGELOG.md TESTING.md'''.split()
+PRIVACY.md THIRD_PARTY_NOTICES.md README.md README.en.md MODEL.md CHANGELOG.md TESTING.md PI.md scripts/pi-bridge.mjs'''.split()
 
 
 def digest(path):

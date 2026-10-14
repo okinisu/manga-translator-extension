@@ -56,3 +56,7 @@ Optional diagnostics are off by default. When enabled, timing, GPU/runtime detai
 
 
 Custom translation instructions are stored locally in Chrome extension storage and included in prompts sent to your selected AI provider. They apply across titles on this device. Clear the field to disable future use; this does not remove prompts already sent to an AI provider.
+
+## Pi local connection
+
+When selected, numbered images and translation prompts pass through http://127.0.0.1:43129 to your installed Pi and its configured AI provider. The bridge key, optional model ID, cached model list and thinking-level preference are stored locally by the extension. Provider credentials remain managed by Pi. The bridge does not persist images or responses, and requests ephemeral Pi sessions.

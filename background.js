@@ -2,7 +2,7 @@ importScripts('core.js','text-core.js','collage-core.js','batch-store.js');
 const reviewOrigin=chrome.runtime.getURL('');
 function internal(s){return s.url?.startsWith(reviewOrigin);}
 async function state(){return chrome.storage.session.get(['job','collection','chatAccess','autoState','aiTabs','reviewTab']);}
-const providers={chatgpt:'https://chatgpt.com/',gemini:'https://gemini.google.com/app'};
+const providers={chatgpt:'https://chatgpt.com/',gemini:'https://gemini.google.com/app',pi:'http://127.0.0.1:43129'};
 function provider(value){if(!Object.hasOwn(providers,value))throw Error('AIの選択が不正です。');return value;}
 function aiURL(url,key='chatgpt'){try{return new URL(url).origin===new URL(providers[provider(key)]).origin;}catch{return false;}}
 async function autoStatus(values){await chrome.storage.session.set({autoState:{...values,updated:Date.now()}});}
@@ -44,13 +44,14 @@ async function ensureAITab(key,sourceTab,explicit,mode){
  try{return await opening;}finally{if(aiOpening.get(slot)===opening)aiOpening.delete(slot);}
 }
 async function preloadAI(c){
+ if(c.aiProvider==='pi'){const settings=await chrome.storage.local.get({piBridgeToken:''});if(!settings.piBridgeToken)throw Error('Pi接続キーを設定してください。');const response=await fetch(providers.pi+'/health',{headers:{Authorization:'Bearer '+settings.piBridgeToken},signal:AbortSignal.timeout(5000)});if(!response.ok)throw Error('Pi接続サーバーまたは接続キーを確認してください。');return;}
  const key=provider(c.aiProvider||'chatgpt'),mode=key==='chatgpt'?await chatMode(c.chatMode):undefined,tab=await ensureAITab(key,c.sourceTab,c.chatMode===mode?c.chatTab:undefined,mode);
  const latest=await state();if(latest.collection?.id!==c.id)throw Error('画像準備の対象が変わりました。');
  await chrome.storage.session.set({collection:{...latest.collection,chatTab:tab.id,chatMode:mode},chatAccess:{tabId:tab.id,provider:key,chatMode:mode}});
  return tab.id;
 }
 async function openAI(j,background=false){
- const key=provider(j.aiProvider||'chatgpt');const initial=await state();if(!j.chatTab&&initial.collection&&initial.collection.id===j.batchId)j.chatTab=initial.collection.chatTab;
+ const key=provider(j.aiProvider||'chatgpt');if(key==='pi'){const current=await state();if(!current.collection?.autoMode)throw Error('Piはメニューの全自動翻訳から実行してください。');await chrome.storage.session.set({job:j});await ensureReviewTab(undefined,!background,j.batchId);return {ok:true};}const initial=await state();if(!j.chatTab&&initial.collection&&initial.collection.id===j.batchId)j.chatTab=initial.collection.chatTab;
  const mode=key==='chatgpt'?await chatMode(j.automation?(j.chatMode||'normal'):(j.chatMode||initial.collection?.chatMode)):undefined;
  const boundMode=j.chatMode||initial.collection?.chatMode||'normal';
  const tab=await ensureAITab(key,j.sourceTab,boundMode===mode?j.chatTab:undefined,mode);
@@ -178,10 +179,10 @@ async function apply(text,j,automatic=false,selectedId=j.id,alreadyApplied=false
   if(!collection?.autoMode&&(!automatic||!next))await chrome.tabs.update(j.sourceTab,{active:true});
   return {ok:true,count:blocks.length,hasNext:!!next||!!collection?.producing,position:collection?collection.index+1:1,total:collection?.ids.length||1};
 }
-chrome.tabs.onRemoved?.addListener(async id=>{const {job,collection,autoState}=await state();if(collection?.autoMode&&(((collection.status==='loading'||collection.producing)&&collection.reviewTab===id)||((job?.chatTab===id||collection.chatTab===id)&&['preparing','running'].includes(autoState?.state))))await autoStatus({...autoState,state:'error',message:'処理用タブが閉じられました。メニューから再開してください。'});});
+chrome.tabs.onRemoved?.addListener(async id=>{const {job,collection,autoState}=await state();if(collection?.autoMode&&(((collection.status==='loading'||collection.producing||collection.aiProvider==='pi')&&collection.reviewTab===id)||((job?.chatTab===id||collection.chatTab===id)&&['preparing','running'].includes(autoState?.state))))await autoStatus({...autoState,state:'error',message:'処理用タブが閉じられました。メニューから再開してください。'});});
 chrome.runtime.onStartup.addListener(()=>{BatchStore.clear().catch(()=>{});chrome.storage.local.remove?.('aiReuseTabs')?.catch(()=>{});});
 chrome.runtime.onMessage.addListener((m,s,respond)=>{
-  let release;const queued=['COLLAGE_APPEND','IMPORT','IMPORT_PREVIEW','SELECT_QUEUE','AUTO_STOP','DISCARD','AUTOMATION_MARK','AUTOMATION_UNSENT','AUTOMATION_RESET','AUTO_RESUME_AI','AUTO_REPORT'].includes(m.type),previous=queueTail;if(queued)queueTail=new Promise(r=>{release=r;});
+  let release;const queued=['PI_CLAIM','COLLAGE_APPEND','IMPORT','IMPORT_PREVIEW','SELECT_QUEUE','AUTO_STOP','DISCARD','AUTOMATION_MARK','AUTOMATION_UNSENT','AUTOMATION_RESET','AUTO_RESUME_AI','AUTO_REPORT'].includes(m.type),previous=queueTail;if(queued)queueTail=new Promise(r=>{release=r;});
   (async()=>{if(queued)await previous;
     // Detection checks must not load or serialize the image-bearing job.
     if(m.type==='COLLECTION_CHECK'){
@@ -237,6 +238,12 @@ chrome.runtime.onMessage.addListener((m,s,respond)=>{
     }
     const {job:j,collection,chatAccess,autoState}=await state();
     const chatAllowed=!!j&&s.tab?.id===j.chatTab&&aiURL(s.url,j.aiProvider||'chatgpt');
+    const piAllowed=internal(s)&&j?.aiProvider==='pi'&&!!m.piAttempt&&j.automation?.attemptId===m.piAttempt&&j.automation?.piRunId===autoState?.runId;
+    if(m.type==='PI_CLAIM'&&internal(s)){
+      if(j?.id!==m.jobId||j.aiProvider!=='pi'||!collection?.autoMode||collection.stopRequested||autoState?.state!=='running')throw Error('Piの翻訳対象が変わりました。');
+      if(j.automation?.piRunId===autoState.runId)return {ok:true,start:false};
+      j.automation={phase:'sent',at:Date.now(),attemptId:crypto.randomUUID(),piRunId:autoState.runId};await chrome.storage.session.set({job:j});return {ok:true,start:true,attemptId:j.automation.attemptId};
+    }
     if(m.type==='AUTO_STOP'&&(internal(s)||chatAllowed)){
       if(collection){collection.stopRequested=true;await chrome.storage.session.set({collection});}
       await autoStatus({...autoState,state:'paused',message:'停止しました。送信済みの返答は再開時に取り込みます。'});
@@ -358,7 +365,7 @@ chrome.runtime.onMessage.addListener((m,s,respond)=>{
       if(j.id!==m.jobId)throw Error('自動翻訳の対象が変わりました。');delete j.automation;await chrome.storage.session.set({job:j});return {ok:true};
     }
     if(m.type==='IMPORT_PREVIEW'){
-      if(!chatAllowed||j.type!=='collage'||j.id!==m.jobId||collection?.waiting||!['sending','sent'].includes(j.automation?.phase))throw Error('自動送信の対象を確認できません。');
+      if((!chatAllowed&&!piAllowed)||j.type!=='collage'||j.id!==m.jobId||collection?.waiting||!['sending','sent'].includes(j.automation?.phase))throw Error('自動送信の対象を確認できません。');
       if(collection?.autoMode&&(collection.stopRequested||autoState?.state!=='running'))throw Error('全自動処理は停止しています。');
       const parsed=MangaCollage.parsePartial(m.text,j),previewId=j.id+':preview';
       const tab=await chrome.tabs.get(j.sourceTab);if(tab.url!==j.url)throw Error('漫画ページが変わりました。');
@@ -372,7 +379,7 @@ chrome.runtime.onMessage.addListener((m,s,respond)=>{
       if(importing)throw Error('反映処理中です。少しお待ちください。');importing=true;
       try{
         if(m.automatic&&collection?.autoMode&&(collection.stopRequested||autoState?.state!=='running'))throw Error('全自動処理は停止しています。');
-        if(m.automatic&&(!chatAllowed||!['sending','sent'].includes(j.automation?.phase)))throw Error('自動送信の状態を確認できません。');
+        if(m.automatic&&((!chatAllowed&&!piAllowed)||!['sending','sent'].includes(j.automation?.phase)))throw Error('自動送信の状態を確認できません。');
         let target=j;
         if(!m.automatic&&j.type==='collage'&&collection?.status==='ready'){
           const replies=MangaCollage.responses(m.text),ids=[...new Set(replies.map(r=>r.jobId))];

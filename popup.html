@@ -9,7 +9,7 @@
 <label class="setting">翻訳先<select id="targetLanguage"><option value="ko">韓国語</option><option value="ja" selected>日本語</option><option value="en">英語</option><option value="zh">中国語（簡体字）</option><option value="zh-TW">中国語（繁体字）</option><option value="es">スペイン語</option><option value="fr">フランス語</option><option value="de">ドイツ語</option><option value="ru">ロシア語</option><option value="pt">ポルトガル語</option><option value="th">タイ語</option><option value="vi">ベトナム語</option></select></label>
 <label class="setting">バッチのまとめ方<select id="batchMode"><option value="accuracy">精度優先（小さめ）</option><option value="balanced" selected>バランス</option><option value="compact">枚数削減（現在の設定）</option></select></label>
 <small>小さくまとめるほど1回の対象が減ります。変更は次の話から適用します。</small>
-<label class="setting">使用するAI<select id="aiProvider"><option value="chatgpt">ChatGPT</option><option value="gemini">Gemini</option></select></label>
+<label class="setting">使用するAI<select id="aiProvider"><option value="chatgpt">ChatGPT</option><option value="gemini">Gemini</option><option value="pi">Pi（ローカル / Codex）</option></select></label>
 <label class="setting" id="chatModeSetting">ChatGPTのチャット<select id="chatgptChatMode" disabled><option value="temporary" selected>一時チャット（標準）</option><option value="normal">通常チャット</option></select></label>
 <small id="chatModeHint">変更は次の話から適用します。</small>
 <details class="memory"><summary>翻訳メモ・カスタム指示</summary>
@@ -37,6 +37,6 @@
 <button id="clear" class="secondary">この話の翻訳表示を消す</button>
 </details>
 <p id="status" role="status" aria-live="polite"></p>
-<script src="ui-i18n.js"></script>
+<details id="piSettings"><summary>Pi 接続 / Pi connection</summary><p>node scripts/pi-bridge.mjs で起動</p><p>まず「接続・モデル一覧を更新」を押すと、画像対応モデルを読み込みます。</p><label>接続キー / Connection key<input id="piBridgeToken" type="password" autocomplete="off"></label><label>画像対応モデル / Vision model<select id="piModel"><option value="">Piの既定モデル / Pi default</option></select></label><label>推論レベル / Thinking level<select id="piThinkingLevel"><option value="default">Piの既定設定 / Pi default</option><option value="off">オフ / Off</option><option value="minimal">最小 / Minimal</option><option value="low">低 / Low</option><option value="medium">中 / Medium</option><option value="high">高 / High</option><option value="xhigh">最高 / Extra high</option><option value="max">最大 / Max</option></select></label><small>モデルが対応する範囲で適用されます。Piの既定設定を選ぶと起動引数を指定しません。</small><button id="piConnect">接続・モデル一覧を更新 / Connect &amp; refresh models</button></details><script src="ui-i18n.js"></script>
 <script src="popup.js"></script>
 </body></html>
