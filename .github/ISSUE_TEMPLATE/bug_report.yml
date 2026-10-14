@@ -1,0 +1,47 @@
+name: 不具合報告 / Bug report
+description: 動作不良・速度・翻訳表示の問題を報告する / Report a problem
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        画像準備・AI操作・訳文表示のどの工程で起きたか教えてください。
+        Issuesは公開です。認証情報・非公開の会話・漫画1話分の画像を貼らないでください。
+        Issues are public. Do not include credentials, private chats or full comic episodes.
+  - type: input
+    id: version
+    attributes:
+      label: 拡張機能のバージョン / Extension version
+      placeholder: "1.0.0"
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: 動作環境 / Environment
+      description: Chrome・OS・GPU・使用AI・CPU/GPU設定 / Chrome, OS, GPU, AI and detector settings
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 再現手順 / Steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期待した動作 / Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: 実際の動作・エラー全文 / Actual behavior and exact error
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: 診断・補足 / Diagnostics and additional details
+      description: 任意。共有前に機微な情報がないか確認してください。 / Optional; review before sharing.

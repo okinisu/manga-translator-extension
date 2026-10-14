@@ -11,7 +11,7 @@ RUNTIME = '''manifest.json popup.html popup.css popup.js review.html review.js u
 ui-i18n.js core.js text-core.js collage-core.js batch-store.js background.js
 comic.js chat.js automation.js gemini-dom.js detector.js detector-worker.js gpu-io-core.js
 CPU-MODEL-OPTIMIZATION.json GPU-MODEL-OPTIMIZATION.json postprocess-core.js pixel-core.js performance-core.js crop-worker.js episode-cache.js debug-core.js debug-ui.js debug.css
-PRIVACY.md THIRD_PARTY_NOTICES.md README.md README.en.md MODEL.md CHANGELOG.md'''.split()
+PRIVACY.md THIRD_PARTY_NOTICES.md README.md README.en.md MODEL.md CHANGELOG.md TESTING.md'''.split()
 
 
 def digest(path):
@@ -76,7 +76,7 @@ def build(destination):
     report = {
         'version': manifest['version'], 'artifact': archive.name, 'sha256': checksum,
         'archiveBytes': archive.stat().st_size, 'files': inventory,
-        'originalCodeLicense': 'selected; see LICENSE' if 'LICENSE' in members else 'pending owner selection; not publicly released',
+        'originalCodeLicense': 'selected; see LICENSE' if 'LICENSE' in members else 'not selected; see THIRD_PARTY_NOTICES.md',
         'status': 'packaged; automated checks recorded in TEST-RESULTS.json; live AI DOM behavior requires manual verification',
         'excluded': ['development diagnostic pages', 'tests', 'conversion scripts', 'validation reports', 'Git history', 'user images/accounts'],
     }

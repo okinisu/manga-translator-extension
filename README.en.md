@@ -1,12 +1,14 @@
 # Manga Translator 1.0
 
-[日本語](README.md)
+[日本語](README.md) · [Download](https://github.com/okinisu/manga-translator-extension/releases/latest) · [Testing](TESTING.md#english) · [Report a bug](https://github.com/okinisu/manga-translator-extension/issues/new/choose)
 
 A Chrome extension that detects text regions locally on NAVER WEBTOON, creates numbered crop collages, asks ChatGPT or Gemini to read and translate them, and overlays the translations on the comic.
 
 ## Install
 
-Download and extract manga-translator-1.0.0.zip from Releases. In chrome://extensions, enable Developer mode, choose Load unpacked and select the extracted folder. Reload existing comic and AI pages.
+Download and extract the dedicated extension ZIP from [Releases](https://github.com/okinisu/manga-translator-extension/releases/latest). In chrome://extensions, enable Developer mode, choose Load unpacked and select the extracted folder. Reload existing comic and AI pages.
+
+For updates, replace the files in the same folder currently loaded by Chrome, reload the extension, then reload comic and AI pages. Loading from another folder can create a separate extension with separate settings. See the [testing guide](TESTING.md#english).
 
 For source installation, clone this repository, run git lfs pull, and load the repository root. GitHub-generated source archives may contain model pointers; use the dedicated release ZIP for bundled model weights.
 
@@ -40,4 +42,4 @@ Includes 30 test suites plus JavaScript syntax checks. Tests cover simulated DOM
 
 See [MODEL.md](MODEL.md), [PRIVACY.md](PRIVACY.md) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). No license has been selected for original code. Third-party licenses remain applicable. This is not an official ChatGPT, Gemini, NAVER or Chrome product. Service terms and content rights apply separately.
 
-Version 1.0.0 is the starting point of this repository history. The repository remains private.
+Version 1.0.0 is the starting point of this repository history and public testing. Report problems through [Issues](https://github.com/okinisu/manga-translator-extension/issues/new/choose). See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidance.

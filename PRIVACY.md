@@ -3,8 +3,8 @@
 Updated / 更新日: 2026-10-14
 Maintainer / 管理者: okinisu
 Contact / 問い合わせ: https://github.com/okinisu/manga-translator-extension/issues
-This contact becomes publicly accessible when the repository is made public.
-公開前はこの問い合わせ先は一般利用者からアクセスできません。
+Issues are public. Do not include account credentials, private conversations or sensitive personal data in reports.
+Issuesは公開されます。認証情報・非公開の会話・機微な個人情報を投稿しないでください。
 
 ## 日本語
 
@@ -12,7 +12,7 @@ This contact becomes publicly accessible when the repository is made public.
 
 この拡張機能は、NAVER WEBTOONの本文画像と文字の位置を処理して、選択したAIで翻訳し、訳文を元のページに重ねて表示します。文字領域の検出・画像の切り抜き・画像の結合は端末内で行います。
 
-翻訳時には、番号付きの切り抜き画像、翻訳依頼文、選択言語、領域ID、直前の原文・訳文の一部（文脈用）を、ログイン済みのChatGPTまたはGeminiへ送ります。全自動開始ボタンを押すと、その話の画像が準備され次第、自動送信が始まります。確認画面での手動操作では送信内容を確認できます。
+翻訳時には、番号付きの切り抜き画像、翻訳依頼文（保存したカスタム指示を含む）、選択言語、領域ID、直前の訳文の一部（旧形式の返答では原文も、文脈用）を、ログイン済みのChatGPTまたはGeminiへ送ります。全自動開始ボタンを押すと、その話の画像が準備され次第、自動送信が始まります。確認画面での手動操作では送信内容を確認できます。
 
 画像取得ではNAVERの画像配信元へ通信します。AIページは選択したサービスへ通信します。各サービスはIPアドレス等の通常の通信情報を受け取る場合があります。送信した画像・会話の保持、学習への利用、削除は、そのサービスの規約・設定・プライバシーポリシーに従います。この拡張から会話を削除していません。
 
@@ -20,11 +20,12 @@ This contact becomes publicly accessible when the repository is made public.
 
 ### 端末内の保存
 
-- Chromeローカルストレージ: 設定、UI言語、話のURLをキーとする原文・訳文・表示位置、再利用するAIタブID。
+- Chromeローカルストレージ: 設定、カスタム指示、UI言語、話のURLをキーとする原文・訳文・表示位置、再利用するAIタブID。
 - セッションストレージ: 進行中の話のURL・画像URL、送信用画像の参照、領域情報、処理状態、AIタブID。新規の番号付き送信画像本体はIndexedDBに保存し、画面への受け渡し時にのみ一時的にBase64化します。旧方式の範囲選択や旧版から再開した処理には、画像がセッションに含まれる場合があります。
 - IndexedDB: 元画像、切り抜き画像、検出結果、送信キュー、部分的に取り込んだ翻訳。
 - 話の検出キャッシュ: 最大3話・256MB・7日。期限・容量の整理はキャッシュの利用・保存時に実行され、7日経過時に即時削除するタイマーはありません。
-- 翻訳表示は検出キャッシュと別に保存され、自動の7日削除対象ではありません。
+- 翻訳表示は検出キャッシュと別に保存され、自動の7日削除対象ではありません。生成中の仮表示は漫画ページのメモリ内だけに保持し、確定するまで保存しません。
+- AI応答時間の集計はAIページ内で保持し、ページの再読み込みでリセットします。
 
 通常、話の翻訳完了・破棄・次の話の準備時に作業用キューが削除されます。保存済みの検出キャッシュと漫画ページの翻訳表示は別に残ります。確認画面のキャッシュ削除ボタンは保存済み画像・検出キャッシュを削除します。漫画ページの削除操作はその話の翻訳表示を消します。すべての拡張内保存データを消すには拡張をアンインストールしてください。AIサービス側に保存された会話や、手動で保存した画像・診断ファイルは別に削除してください。
 
@@ -36,13 +37,13 @@ This contact becomes publicly accessible when the repository is made public.
 
 ## English
 
-This extension translates comic dialogue on NAVER WEBTOON. Detection, cropping and collage generation run locally. For translation, it sends numbered image crops, a translation prompt, chosen languages, region IDs and limited preceding source/translated dialogue to the ChatGPT or Gemini page you are signed into. Starting automatic translation authorizes sending batches as they become ready. Manual review lets you inspect prepared content.
+This extension translates comic dialogue on NAVER WEBTOON. Detection, cropping and collage generation run locally. For translation, it sends numbered image crops, a translation prompt (including saved custom instructions), chosen languages, region IDs and limited preceding translations (plus source text for legacy replies) to the ChatGPT or Gemini page you are signed into. Starting automatic translation authorizes sending batches as they become ready. Manual review lets you inspect prepared content.
 
 Source images are downloaded from NAVER's image host. AI pages communicate with their respective services. Those services may receive normal network information such as your IP address. Their policies and account settings govern uploaded content, conversation retention, training and deletion. Removing extension data does not delete AI conversations.
 
 There is no developer-operated data receiver, analytics or advertising SDK. The extension does not implement password, payment, API-key or cookie collection. It reads and operates the AI page's composer, attachments, responses and errors to perform translation.
 
-Local storage holds settings, episode URLs, source/translated dialogue, overlay coordinates and reusable AI tab IDs. Session storage holds active episode/image URLs, outbound image references, regions and run state. New numbered outbound images remain in IndexedDB and are temporarily encoded as Base64 only for transfer to a page. Legacy range selections or jobs resumed from older versions may retain inline session images. IndexedDB holds source/crop images, detection results, queues and partially received translations. Detection cache is limited to three episodes, 256 MB and seven days; expiration is enforced during cache access/writes rather than by an immediate seven-day deletion timer. Saved translation overlays have no automatic seven-day expiry.
+Local storage holds settings, custom instructions, episode URLs, source/translated dialogue, overlay coordinates and reusable AI tab IDs. Session storage holds active episode/image URLs, outbound image references, regions and run state. New numbered outbound images remain in IndexedDB and are temporarily encoded as Base64 only for transfer to a page. Legacy range selections or jobs resumed from older versions may retain inline session images. IndexedDB holds source/crop images, detection results, queues and partially received translations. Detection cache is limited to three episodes, 256 MB and seven days; expiration is enforced during cache access/writes rather than by an immediate seven-day deletion timer. Saved translation overlays have no automatic seven-day expiry. Provisional overlays stay in comic-page memory and are not persisted before confirmation. AI response-time statistics stay in AI-page memory and reset on page reload.
 
 Working queues are normally cleared on completion, discard or new episode preparation. Detection cache and saved overlays remain separate. Use the review page to clear the image/detection cache and the comic page to delete its translation overlay. Uninstall the extension to remove all extension-managed storage. Separately delete AI conversations and manually downloaded files if desired.
 

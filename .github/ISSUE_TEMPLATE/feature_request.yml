@@ -1,0 +1,16 @@
+name: 改善案 / Feature request
+description: 欲しい機能や操作の改善を提案する / Suggest an improvement
+title: "[Feature] "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: 困っていること / Problem
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: 希望する動作 / Proposed behavior
+    validations:
+      required: true

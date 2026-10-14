@@ -11,3 +11,6 @@ __pycache__/
 
 # Release candidates
 dist/
+
+# Local test output
+TEST-RESULTS.json

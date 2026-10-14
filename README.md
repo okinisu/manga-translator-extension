@@ -1,15 +1,19 @@
 # 漫画翻訳 / Manga Translator 1.0
 
-[English](README.en.md)
+[English](README.en.md) · [ダウンロード](https://github.com/okinisu/manga-translator-extension/releases/latest) · [テスト手順](TESTING.md) · [不具合報告](https://github.com/okinisu/manga-translator-extension/issues/new/choose)
 
 NAVER WEBTOONの文字領域を端末内で検出し、番号付きの切り抜き画像をChatGPTまたはGeminiで翻訳して、漫画上に訳文を重ねるChrome拡張機能です。モデルは文章の位置を検出するもので、文字起こしと翻訳は選択したAIが担当します。
 
 ## インストール
 
-1. Releasesから manga-translator-1.0.0.zip をダウンロードして展開します。
+1. [Releases](https://github.com/okinisu/manga-translator-extension/releases/latest)から専用ZIP（例：manga-translator-1.0.0.zip）をダウンロードして展開します。
 2. Chromeで chrome://extensions を開き、デベロッパーモードを有効にします。
 3. 「パッケージ化されていない拡張機能を読み込む」で展開したフォルダーを選択します。
 4. 漫画ページとAIページを開いていた場合は再読み込みします。
+
+更新するときは、Chromeで現在読み込んでいる同じフォルダーへ新しいZIPの内容を上書きし、拡張機能の再読み込みボタンを押します。漫画ページとAIページも再読み込みしてください。別フォルダーから追加すると別の拡張機能として扱われる場合があるため、設定を引き継ぐ場合は読み込み先を揃えてください。
+
+詳しい確認項目は[テスト手順](TESTING.md)にまとめています。
 
 ソースから使う場合はGit LFSが必要です。
 
@@ -62,4 +66,4 @@ python3 scripts/package_extension.py --output dist
 
 独自コードのライセンスは未選定です。モデル・ランタイムのライセンスとは別です。ChatGPT、Gemini、NAVER、Chromeの公式製品ではなく、各サービスの利用条件やコンテンツの権利は別途適用されます。
 
-この1.0.0を開発履歴の起点とします。公開状態は非公開です。
+この1.0.0を開発履歴の起点として公開テストしています。不具合は[Issues](https://github.com/okinisu/manga-translator-extension/issues/new/choose)へ報告してください。開発への参加方法は[CONTRIBUTING.md](CONTRIBUTING.md)を参照してください。
