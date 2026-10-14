@@ -1,0 +1,80 @@
+{
+  "manifest_version": 3,
+  "name": "漫画翻訳 / Manga Translator",
+  "version": "1.0.0",
+  "description": "漫画の文字領域を検出し、ChatGPTまたはGeminiで自動翻訳して原文を覆います。",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "clipboardWrite"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://comic.naver.com/*"
+      ],
+      "js": [
+        "core.js",
+        "ui-i18n.js",
+        "comic.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://chatgpt.com/*"
+      ],
+      "js": [
+        "core.js",
+        "text-core.js",
+        "collage-core.js",
+        "automation.js",
+        "ui-i18n.js",
+        "chat.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://gemini.google.com/*"
+      ],
+      "js": [
+        "core.js",
+        "text-core.js",
+        "collage-core.js",
+        "automation.js",
+        "gemini-dom.js",
+        "ui-i18n.js",
+        "chat.js"
+      ]
+    }
+  ],
+  "host_permissions": [
+    "https://image-comic.pstatic.net/*"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; worker-src 'self'"
+  },
+  "cross_origin_embedder_policy": {
+    "value": "require-corp"
+  },
+  "cross_origin_opener_policy": {
+    "value": "same-origin"
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  }
+}

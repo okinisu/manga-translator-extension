@@ -1,0 +1,11 @@
+const assert=require('node:assert/strict'),M=require('./text-core.js');
+const collection={id:'episode',sourceTab:1,url:'https://comic.naver.com/webtoon/detail?titleId=808482&no=155'};
+const records=Array.from({length:108},(_,i)=>({id:'line-'+i,original:'안녕하세요. 오늘은 좋은 날입니다.',enabled:true,relative:{x:.1,y:.2,width:.3,height:.1},imageIndex:i}));
+const jobs=M.buildJobs(records,collection);assert.equal(jobs.length,1);assert.equal(jobs[0].records.length,108);assert.equal(jobs[0].image,undefined);
+const split=M.buildJobs(records,collection,'rev',1800);assert.ok(split.length>1);assert.deepEqual(split.flatMap(j=>j.records.map(r=>r.id)),records.map(r=>r.id));assert.ok(split.every(j=>M.textPrompt(j).length<=1800));
+const job=jobs[0],answer={jobId:job.id,translations:records.map(r=>({id:r.id,ja:'こんにちは。'}))};
+const translated=M.parseTranslations('```json\n'+JSON.stringify(answer)+'\n```',job);assert.equal(translated.length,108);assert.deepEqual(translated[0].relative,records[0].relative);
+for(const invalid of [{...answer,jobId:'old'},{...answer,translations:answer.translations.slice(1)},{...answer,translations:[...answer.translations.slice(1),answer.translations[1]]},{...answer,translations:[...answer.translations.slice(1),{id:'unknown',ja:'x'}]}])assert.throws(()=>M.parseTranslations(JSON.stringify(invalid),job));
+const rows=M.detectionRows({blocks:[{paragraphs:[{lines:[{text:'오',bbox:{x0:10,y0:10,x1:30,y1:30}},{text:'늘은',bbox:{x0:34,y0:12,x1:74,y1:31}},{text:'다른',bbox:{x0:180,y0:10,x1:220,y1:30}}]}]}]});assert.equal(rows.length,2);assert.equal(rows[0].bbox.x1,74);
+const data={blocks:[{paragraphs:[{lines:[{text:'안녕하세요.',confidence:90,bbox:{x0:20,y0:40,x1:100,y1:80}}]}]}]};const out=M.recordsFromData(data,{prefix:'x',src:'image',imageIndex:0,scale:2,width:100,height:200,offsetY:50});assert.equal(out[0].relative.y,67/200);assert.equal(out[0].original,'안녕하세요.');
+console.log('PASS: whole-episode text batching, safety splitting with order preservation, strict ID completeness, fixed coordinates, fragmented-line grouping');

@@ -1,0 +1,11 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),crypto=require('node:crypto');
+const manifest=JSON.parse(fs.readFileSync('manifest.json'));
+assert.equal(manifest.cross_origin_embedder_policy.value,'require-corp');
+assert.equal(manifest.cross_origin_opener_policy.value,'same-origin');
+const hash=p=>crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+const cpu=JSON.parse(fs.readFileSync('CPU-MODEL-OPTIMIZATION.json')),gpu=JSON.parse(fs.readFileSync('GPU-MODEL-OPTIMIZATION.json'));
+assert.equal(cpu.validated,true);assert.equal(gpu.validated,true);assert.equal(gpu.workerValidationPassed,true);
+assert.equal(hash('vendor/detector_int8_static.onnx'),cpu.optimizedSHA256);
+assert.equal(hash('vendor/detector_fp32.onnx'),gpu.fp32SHA256);
+assert.equal(hash(gpu.modelFile),gpu.optimizedSHA256);
+console.log('PASS: bundled CPU INT8, GPU FP32 and partial-FP16 model hashes and validation flags');

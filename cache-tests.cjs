@@ -1,0 +1,38 @@
+const assert=require('node:assert/strict'),C=require('./episode-cache.js');
+const input={id:'batch-a',url:'https://comic.naver.com/webtoon/detail?titleId=808482&no=156&week=thu',urls:['image-a']};
+assert.notEqual(C.key(input),C.key({...input,detectorGpuCapture:'on'}));assert.notEqual(C.key({...input,detectorGpuCapture:'off'}),C.key({...input,detectorGpuCapture:'on'}));assert.equal(C.key(input),C.key({...input,detectorGpuCapture:'bogus'}));
+const sources=[{blob:new Blob(['source']),width:690,height:1000}],chapter={images:[{src:'image-a',width:690,height:1000,top:0}],records:[{box:{x:1,y:2,width:3,height:4},cropBlob:new Blob(['crop'])}]};
+const value={id:C.key(input),sources,chapter,created:Date.now(),used:Date.now()};
+assert.equal(C.key(input),C.key({...input,id:'batch-b',url:input.url.replace('week=thu','week=fri')}));
+assert.notEqual(C.key(input),C.key({...input,url:input.url.replace('no=156','no=157')}));
+assert.notEqual(C.key(input),C.key({...input,urls:['new-image']}));
+assert.equal(C.valid(value,input),true);assert.equal(C.valid({...value,created:Date.now()-C.TTL-1},input),false);
+assert.equal(C.valid({...value,sources:[]},input),false);assert.equal(C.valid(JSON.parse(JSON.stringify(value)),input),false);
+const part={y:0,height:1000,ownTop:0,ownBottom:1000},window={cacheKey:C.windowKey(input,part,690),detectionBackend:'TFJS WebGPU',detectionGPU:'nvidia',records:chapter.records};
+assert.equal(C.validWindow(window,input,part,690),true);
+assert.equal(C.validWindow({records:chapter.records},input,part,690),false);
+assert.equal(C.validWindow({...window,cacheKey:'old-model'},input,part,690),false);
+assert.equal(C.validWindow(window,{...input,detectorBackend:'tfjs-webgpu'},part,690),false);
+assert.equal(C.validWindow(window,input,{...part,y:100},690),false);
+assert.equal(C.validWindow(window,input,part,700),false);
+assert.equal(C.validWindow({...window,records:[{...chapter.records[0],cropBlob:{}}]},input,part,690),false);
+assert.equal(C.validWindow({...window,records:[null]},input,part,690),false);
+assert.ok(C.bytes(value)>sources[0].blob.size);
+const now=Date.now(),entry=(id,used,bytes=1)=>({id,used,bytes,created:now});
+assert.deepEqual(C.evict([entry('a',1),entry('b',2),entry('c',3),entry('d',4)]),['a']);
+assert.deepEqual(C.evict([entry('big',2,C.MAX_BYTES),entry('older',1)]),['older']);
+assert.deepEqual(C.evict([{...entry('expired',1),created:now-C.TTL-1}],now),['expired']);
+const entries=new Map(),jobs=new Map([['batch-a:source:0',sources[0]]]);
+global.BatchStore={get:async id=>jobs.get(id),getEpisode:async id=>entries.get(id),putEpisode:async v=>entries.set(v.id,structuredClone(v)),listEpisodes:async()=>[...entries.values()],removeEpisode:async id=>entries.delete(id),clearEpisodes:async()=>entries.clear()};
+(async()=>{assert.equal(await C.put(input,chapter),true);jobs.clear();const cached=await C.get({...input,id:'batch-b'});assert.ok(cached.sources[0].blob instanceof Blob);assert.equal(cached.chapter.records.length,1);assert.equal(await C.get({...input,urls:['changed']}),null);assert.equal(entries.size,1);await C.clear();assert.equal(entries.size,0);// Exercise the real store wrapper against a transaction-faithful in-memory IndexedDB.
+const vm=require('node:vm'),fs=require('node:fs'),stores=new Map([['jobs',new Map([['legacy',{id:'legacy'}]])]]);
+const database={objectStoreNames:{contains:n=>stores.has(n)},createObjectStore:n=>stores.set(n,new Map()),transaction(name){const tx={objectStore:()=>{const map=stores.get(name),request=fn=>{const r={};queueMicrotask(()=>{r.result=fn();r.onsuccess?.();queueMicrotask(()=>tx.oncomplete?.());});return r;};return {put:v=>request(()=>{map.set(v.id,structuredClone(v));return v.id;}),get:id=>request(()=>structuredClone(map.get(id))),getAll:()=>request(()=>structuredClone([...map.values()])),delete:id=>request(()=>map.delete(id)),clear:()=>request(()=>map.clear())};}};return tx;}};
+const ctx=vm.createContext({indexedDB:{open(name,version){assert.equal(version,2);const r={result:database};queueMicrotask(()=>{r.onupgradeneeded();r.onsuccess();});return r;}},Uint8Array,btoa});
+vm.runInContext(fs.readFileSync(__dirname+'/batch-store.js','utf8'),ctx);const S=ctx.BatchStore;
+assert.equal((await S.get('legacy')).id,'legacy','Upgrade preserves previous queue');
+await S.putMany([{id:'group-a',blob:sources[0].blob},{id:'group-b',blob:sources[0].blob}]);assert.equal((await S.get('group-a')).blob.size,sources[0].blob.size);assert.equal((await S.get('group-b')).blob.size,sources[0].blob.size);
+await S.putEpisode({id:'saved',sources});await S.clear();assert.equal(await S.get('legacy'),undefined);assert.equal((await S.getEpisode('saved')).sources[0].blob.size,sources[0].blob.size,'Startup/completion cleanup must preserve episode cache');
+await S.put({id:'active'});await S.clearEpisodes();assert.equal(await S.getEpisode('saved'),undefined);assert.equal((await S.get('active')).id,'active','Clearing cache preserves active translation');
+console.log('PASS: cross-queue episode cache keys, URL/model revision isolation, Blob preservation, expiry, LRU/size limits and explicit clear');})().catch(e=>{console.error(e);process.exitCode=1;});
+
+assert.equal(C.key({...input,batchMode:"accuracy"}),C.key({...input,batchMode:"compact"}),"Batch layout changes must reuse detection cache");

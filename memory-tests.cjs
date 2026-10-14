@@ -1,0 +1,18 @@
+const assert=require('node:assert/strict'),C=require('./collage-core.js'),T=require('./text-core.js'),Core=require('./core.js');
+const note='ビヨルンは「俺」。\nラフドニアで統一。<memo> "test"';
+const job={id:'j',type:'collage',records:[{id:'001'}],customInstructions:note};
+const prompt=C.prompt(job);assert.ok(prompt.includes(JSON.stringify(note)));assert.match(prompt,/idとtranslatedだけ/);
+assert.ok(prompt.indexOf('【ユーザーの翻訳メモ】')<prompt.indexOf('【出力】'));
+assert.ok(!C.prompt({...job,customInstructions:''}).includes('【ユーザーの翻訳メモ】'));
+assert.equal(C.normalizeMemory('  指示 \n'),'指示');assert.equal(C.normalizeMemory(),'');
+for(const v of [1,{},'x'.repeat(4001)])assert.throws(()=>C.normalizeMemory(v),/4000/);
+assert.ok(C.prompt({...job,customInstructions:'x'.repeat(4000)}));
+const jobs=T.buildJobs([{id:'x',original:'text',enabled:true}],{id:'batch',customInstructions:note},'r');
+assert.equal(jobs[0].customInstructions,note);assert.ok(T.textPrompt(jobs[0]).includes(JSON.stringify(note)));
+assert.ok(Core.prompt({id:'capture',customInstructions:note}).includes(JSON.stringify(note)));
+const fs=require('node:fs');
+const review=fs.readFileSync(__dirname+'/review.js','utf8');
+assert.ok(review.includes('input.customInstructions??cacheSettings.customInstructions'));
+assert.equal((review.match(/customInstructions:cacheSettings.customInstructions/g)||[]).length,2,'Fresh and cached chapters both receive current episode memory');
+assert.ok(review.includes("customInstructions:chapter.customInstructions||''"));
+console.log('PASS: custom memo in prompts, bounded validation, disabled empty memo, legacy text/capture, current memo overrides cached episode');

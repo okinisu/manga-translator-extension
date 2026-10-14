@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ja">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="ui.css"><link rel="stylesheet" href="popup.css"><title>漫画翻訳</title></head>
+<body class="popup">
+<h1>漫画翻訳</h1>
+<label class="setting">LANGUAGE<select id="uiLanguage" data-no-localize><option value="ja">日本語</option><option value="en">English</option></select></label>
+<label class="setting">検出方式<select id="backend"><option value="auto" selected>GPU＋CPU併用</option><option value="wasm">CPUのみ</option></select></label>
+<label class="setting">翻訳元<select id="sourceLanguage"><option value="auto">自動判定</option><option value="ko" selected>韓国語</option><option value="ja">日本語</option><option value="en">英語</option><option value="zh">中国語（簡体字）</option><option value="zh-TW">中国語（繁体字）</option><option value="es">スペイン語</option><option value="fr">フランス語</option><option value="de">ドイツ語</option><option value="ru">ロシア語</option><option value="pt">ポルトガル語</option><option value="th">タイ語</option><option value="vi">ベトナム語</option></select></label>
+<label class="setting">翻訳先<select id="targetLanguage"><option value="ko">韓国語</option><option value="ja" selected>日本語</option><option value="en">英語</option><option value="zh">中国語（簡体字）</option><option value="zh-TW">中国語（繁体字）</option><option value="es">スペイン語</option><option value="fr">フランス語</option><option value="de">ドイツ語</option><option value="ru">ロシア語</option><option value="pt">ポルトガル語</option><option value="th">タイ語</option><option value="vi">ベトナム語</option></select></label>
+<label class="setting">バッチのまとめ方<select id="batchMode"><option value="accuracy">精度優先（小さめ）</option><option value="balanced" selected>バランス</option><option value="compact">枚数削減（現在の設定）</option></select></label>
+<small>小さくまとめるほど1回の対象が減ります。変更は次の話から適用します。</small>
+<label class="setting">使用するAI<select id="aiProvider"><option value="chatgpt">ChatGPT</option><option value="gemini">Gemini</option></select></label>
+<label class="setting" id="chatModeSetting">ChatGPTのチャット<select id="chatgptChatMode" disabled><option value="temporary" selected>一時チャット（標準）</option><option value="normal">通常チャット</option></select></label>
+<small id="chatModeHint">変更は次の話から適用します。</small>
+<details class="memory"><summary>翻訳メモ・カスタム指示</summary>
+<label for="customInstructions">毎回の翻訳に追加する指示</label>
+<textarea id="customInstructions" rows="5" maxlength="4000" disabled placeholder="例：人名の表記を統一する。主人公の一人称は「俺」。"></textarea>
+<small>自動保存・最大4000文字。この端末の全作品に共通です。変更は次の話の準備から適用します。空欄で無効になります。</small>
+</details>
+<button id="automatic">裏で全自動翻訳 / 再開</button>
+<button id="autoStop" class="secondary" hidden>停止</button>
+<p id="autoProgress" role="status"></p>
+<button id="whole" class="secondary">この話を翻訳する準備</button>
+<button id="review" class="secondary">画像・翻訳を開く</button>
+<label class="check"><input type="checkbox" id="visible" checked> 訳文で原文を覆う</label>
+<details class="advanced"><summary>詳細設定</summary>
+<label class="setting">GPU推論精度<select id="gpuPrecision"><option value="auto" selected>自動（FP16優先）</option><option value="fp32">FP32</option><option value="fp16">FP16（非対応時はFP32）</option></select></label>
+<label class="setting">Graph Capture<select id="gpuCapture"><option value="auto" selected>自動</option><option value="off">無効</option><option value="on">有効（試験用）</option></select></label>
+<small>FP16推論に適用します。有効にすると検出結果が変わる場合があります。</small>
+<label class="setting">GPU並列数<select id="gpuParallel"><option value="1">1</option><option value="2" selected>2</option><option value="4">4</option></select></label>
+<small>2・4並列では検出結果が変わる場合があります。</small>
+<label class="setting">GPUの優先方針<select id="gpuPower"><option value="high-performance">高性能</option><option value="low-power">省電力</option></select></label>
+<label class="setting">CPU並列数<select id="parallel"><option value="auto">自動（最大4）</option><option value="1" selected>1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option></select></label>
+<label class="setting">CPUスレッド数<select id="threads"><option value="1">1</option><option value="2" selected>2</option><option value="4">4</option></select></label>
+<small>変更は次の検出から適用します。</small>
+<label class="check"><input type="checkbox" id="debug"> 診断を記録する</label>
+<button id="clear" class="secondary">この話の翻訳表示を消す</button>
+</details>
+<p id="status" role="status" aria-live="polite"></p>
+<script src="ui-i18n.js"></script>
+<script src="popup.js"></script>
+</body></html>

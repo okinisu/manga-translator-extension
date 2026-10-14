@@ -1,0 +1,75 @@
+{
+  "validated": true,
+  "validationScope": "1.1.22 AMD native Capture: production worker/CSP validated; 192 raw output pairs exactly match 1.1.21; FP32-reference geometry <=3px, confidence <=0.02. 75ms target NOT achieved.",
+  "runtime": "onnxruntime-web 1.30.0 native WebGPU",
+  "precision": "FP16 backbone/encoder and decoder float islands; FP32 final decoder normalization, remaining unconverted operations, postprocessor and IO",
+  "modelFile": "vendor/detector_gpu_fp16.onnx",
+  "optimizedSHA256": "cce194c545367fccba4dabc98dd4aa3568ea85ca6a8768e04cfb682e49851176",
+  "fp32SHA256": "8d243982148be0e5a51422b43676b38fe9869bfb3fa7215b4b9f05fe5feb50d2",
+  "outputScores": "/postprocessor/Sigmoid_output_0",
+  "outputBoxes": "/postprocessor/Concat_output_0",
+  "comparison": {
+    "name": "optimized",
+    "meanMs": 82.29354166643073,
+    "regions": 59,
+    "mismatchWindows": [],
+    "maxBoxEdgeErrorPx": 1.5714111328125,
+    "maxScoreError": 0.019828379154205322,
+    "accepted": true
+  },
+  "workerValidationPassed": true,
+  "fp32FallbackRuntime": "onnxruntime-web 1.23.2 JSEP",
+  "graphOptimization": "expanded decoder FP16 with final normalization kept FP32",
+  "strictOutputEqualityPassed": false,
+  "historicalGpuValidation": "Old GPU experiment and precision validation reports refer to v1.1.13 base model, not this graph variant.",
+  "casts": 51,
+  "nodes": 894,
+  "Tile": 0,
+  "ioOptimization": "fixed GPU input/outputs and one fresh combined readback; Graph Capture disabled",
+  "ioDataIntegrityPassed": true,
+  "acceptanceTolerances": {
+    "maxBoxEdgeErrorPx": 3,
+    "maxScoreError": 0.02,
+    "classAndCountMustMatch": true
+  },
+  "workerComparisons": [
+    {
+      "name": "fp32-reference",
+      "meanMs": 165.21812499997517,
+      "regions": 59,
+      "mismatchWindows": [],
+      "maxBoxEdgeErrorPx": 0,
+      "maxScoreError": 0,
+      "accepted": true
+    },
+    {
+      "name": "baseline",
+      "meanMs": 89.07723958309118,
+      "regions": 59,
+      "mismatchWindows": [],
+      "maxBoxEdgeErrorPx": 1.5714111328125,
+      "maxScoreError": 0.019828379154205322,
+      "accepted": true
+    },
+    {
+      "name": "optimized",
+      "meanMs": 82.29354166643073,
+      "regions": 59,
+      "mismatchWindows": [],
+      "maxBoxEdgeErrorPx": 1.5714111328125,
+      "maxScoreError": 0.019828379154205322,
+      "accepted": true
+    },
+    {
+      "name": "optimized-repeat",
+      "meanMs": 82.23567708379899,
+      "regions": 59,
+      "mismatchWindows": [],
+      "maxBoxEdgeErrorPx": 1.5714111328125,
+      "maxScoreError": 0.019828379154205322,
+      "accepted": true
+    }
+  ],
+  "runtimeOptimization": "native AMD Graph Capture; provider options object; frozen/nonfinite startup guard and non-Capture retry",
+  "graphCaptureEnabledOnValidatedAMD": true
+}

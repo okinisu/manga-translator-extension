@@ -1,0 +1,13 @@
+# Local/generated files
+.DS_Store
+Thumbs.db
+node_modules/
+__pycache__/
+*.py[cod]
+*.log
+*.zip
+.env
+.env.*
+
+# Release candidates
+dist/

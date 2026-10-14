@@ -1,0 +1,23 @@
+const assert=require('node:assert/strict');
+const {pipeline}=require('./performance-core.js');
+const tick=()=>new Promise(r=>setImmediate(r));
+(async()=>{
+ let release,produced=[],consumed=[];
+ const gate=new Promise(r=>release=r);
+ const running=pipeline([0,1,2,3],1,1,async i=>{produced.push(i);return i;},async i=>{if(i===0)await gate;consumed.push(i);return i*2;},{capacity:2});
+ for(let i=0;i<10&&produced.length<2;i++)await tick();
+ assert.deepEqual(produced,[0,1],'Next inference must finish while first postprocessing remains blocked; bounded capacity prevents a third');assert.deepEqual(consumed,[]);
+ release();assert.deepEqual(await running,[0,2,4,6]);assert.deepEqual(consumed,[0,1,2,3]);
+ let active=0,peak=0;
+ const ordered=await pipeline([0,1,2,3,4],2,2,async i=>{active++;peak=Math.max(peak,active);await new Promise(r=>setTimeout(r,i===0?10:1));active--;return i;},async i=>i+10,{capacity:4});
+ assert.deepEqual(ordered,[10,11,12,13,14]);assert.equal(peak,2,'Inference limit remains independently bounded');
+ const disposed=new Set(),made=[];
+ await assert.rejects(pipeline([0,1,2,3,4,5],2,1,async i=>{await new Promise(r=>setTimeout(r,i?8:1));made.push(i);return i;},async i=>{try{throw Error('postprocess failed');}finally{disposed.add(i);}},{capacity:3,dispose:i=>disposed.add(i)}),/postprocess failed/);
+ assert.deepEqual([...disposed].sort(),[...made].sort(),'Queued and late-produced resources must be disposed before failure returns');
+ const settled=made.length;await new Promise(r=>setTimeout(r,15));assert.equal(made.length,settled,'No orphan producers continue after failure');
+ assert.deepEqual(await pipeline([],2,2,()=>{throw Error('unused');},()=>{throw Error('unused');}),[]);
+ const streamed=await pipeline((async function*(){for(let i=0;i<5;i++){await tick();yield i;}})(),2,2,async i=>i,async i=>i*3,{capacity:3});
+ assert.deepEqual(streamed,[0,3,6,9,12],'Asynchronous source stream retains order');
+ await assert.rejects(pipeline((async function*(){yield 1;throw Error('download failed');})(),2,1,async i=>i,async i=>i),/download failed/);
+ console.log('PASS: inference overlaps blocked postprocessing, bounded backlog, ordered results, independent concurrency and failure draining/resource disposal');
+})().catch(e=>{console.error(e);process.exitCode=1;});

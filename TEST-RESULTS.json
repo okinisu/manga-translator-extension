@@ -1,0 +1,156 @@
+{
+  "passed": true,
+  "suites": 30,
+  "checks": [
+    {
+      "file": "ai-tab-tests.cjs",
+      "passed": true,
+      "output": "PASS: temporary default, normal/temporary isolation, preference pinning, legacy sent resume; AI preload/open race, loading hidden-URL reuse, activation, closed/foreign tabs, provider isolation and creation-error recovery"
+    },
+    {
+      "file": "auto-provider-tests.cjs",
+      "passed": true,
+      "output": "PASS: AI selection, background preparation/open/completion, binding and origin checks, single claim, stop/resume without resend, sent provider lock and progress"
+    },
+    {
+      "file": "automation-tests.cjs",
+      "passed": true,
+      "output": "PASS: automatic sequence, sent/ambiguous resume without duplicate send, upload failure, usage limit, pause before send, concurrent start rejection"
+    },
+    {
+      "file": "batch-settings-tests.cjs",
+      "passed": true,
+      "output": "PASS: saved batch selector, changes persisted before start, invalid selection rejected, three visible profiles"
+    },
+    {
+      "file": "cache-tests.cjs",
+      "passed": true,
+      "output": "PASS: cross-queue episode cache keys, URL/model revision isolation, Blob preservation, expiry, LRU/size limits and explicit clear"
+    },
+    {
+      "file": "chat-tests.cjs",
+      "passed": true,
+      "output": "PASS: manual previous/next/direct jump, preview/queue synchronization without sending; ProseMirror paragraph normalization, phase display, missed/deferred progress updates and completion recovery; one-click image and prompt preparation, no implicit send, no duplicate attachment/concurrent preparation, missing/rejected/invalid image and upload-busy stop, preserve unrelated draft, sent-job protection, cancellation, external queue advance updates progress without sending, queue completion disables controls"
+    },
+    {
+      "file": "collage-tests.cjs",
+      "passed": true,
+      "output": "PASS: text-only detection filtering, duplicate suppression, cross-image anchoring, atlas bounds and coverage, exact ID completeness, skip without overlays\nPASS: translation-only output, legacy original input, strict/partial validation and retry prompt"
+    },
+    {
+      "file": "crop-tests.cjs",
+      "passed": true,
+      "output": "PASS: crop geometry, PNG output, colors, bitmap/canvas cleanup, unsupported-worker fallback, matching replies and worker failure recovery"
+    },
+    {
+      "file": "debug-tests.cjs",
+      "passed": true,
+      "output": "PASS: opt-in timing, sanitized export, bounded recording, parallel sums, detached snapshots and reset\nPASS: overlapping/serial/clipped request intervals, idle time, average/max concurrency, pending snapshot labeling and queue metrics\nPASS: structured readable metrics, missing-value semantics, incomplete concurrency, error/cache states and multiline export"
+    },
+    {
+      "file": "detector-tests.cjs",
+      "passed": true,
+      "output": "PASS: default 4 and maximum 8 simultaneous workers; simultaneous independent worker inference, idle-worker scheduling, per-session serialization, out-of-order replies, cancellation and startup fallback"
+    },
+    {
+      "file": "gpu-io-tests.cjs",
+      "passed": true,
+      "output": "PASS: fixed GPU I/O reuse, fresh per-image readback, independent snapshots, error recovery and idempotent resource cleanup"
+    },
+    {
+      "file": "image-transfer-tests.cjs",
+      "passed": true,
+      "output": "PASS: native and legacy Base64 produce byte-identical data URLs, including all padding and chunk boundaries"
+    },
+    {
+      "file": "lightweight-state-tests.cjs",
+      "passed": true,
+      "output": "PASS: detection checks/progress do not load or return job images, stop/stale/origin guards and automatic report semantics"
+    },
+    {
+      "file": "memory-tests.cjs",
+      "passed": true,
+      "output": "PASS: custom memo in prompts, bounded validation, disabled empty memo, legacy text/capture, current memo overrides cached episode"
+    },
+    {
+      "file": "operator-profile-tests.cjs",
+      "passed": true,
+      "output": "PASS: nanosecond/microsecond units, warmup exclusion, zero-quantized GPU events, CPU provider attribution and overlapping transfer waits"
+    },
+    {
+      "file": "optimization-tests.cjs",
+      "passed": true,
+      "output": "PASS: bundled CPU INT8, GPU FP32 and partial-FP16 model hashes and validation flags"
+    },
+    {
+      "file": "performance-tests.cjs",
+      "passed": true,
+      "output": "PASS: 20 source uses decode once; bounded LRU, concurrent reuse, cleanup/error recovery, ordered 3-way downloads and failure draining"
+    },
+    {
+      "file": "pipeline-tests.cjs",
+      "passed": true,
+      "output": "PASS: inference overlaps blocked postprocessing, bounded backlog, ordered results, independent concurrency and failure draining/resource disposal"
+    },
+    {
+      "file": "postprocess-tests.cjs",
+      "passed": true,
+      "output": "PASS: TopK300, tie order, width/height scaling, malformed output rejection and all CHW FP32 pixels exactly match original preprocessing"
+    },
+    {
+      "file": "response-timing-tests.cjs",
+      "passed": true,
+      "output": "Response timing: monotonic durations, confirmation separated, failures/resumes excluded, bounded average/reset PASS"
+    },
+    {
+      "file": "retry-tests.cjs",
+      "passed": true,
+      "output": "PASS: immediate per-ID apply, missing-only 12-crop retries, stable overlay/queue IDs, skip tracking, sent retry stop/resume, per-ID retry limit, invalid-response rejection"
+    },
+    {
+      "file": "review-tab-tests.cjs",
+      "passed": true,
+      "output": "PASS: single review tab across concurrent starts/menu, background focus, reload recovery, closed/foreign tabs, origin guard and producer preference"
+    },
+    {
+      "file": "review-tests.cjs",
+      "passed": true,
+      "output": "PASS: parallel window inference retains order; selective recrop and cached resume skip model; JSON Blob corruption reproduced; intact preview Blobs, unsaved edits survive refresh, old atlas removed only after successful activation"
+    },
+    {
+      "file": "session-image-tests.cjs",
+      "passed": true,
+      "output": "PASS: 8388608 bytes remain outside session storage; authorized transfer, known-image reuse, restart and retry reference verified; peak session 372 bytes\nPASS: 20971520 bytes remain outside session storage; authorized transfer, known-image reuse, restart and retry reference verified; peak session 372 bytes"
+    },
+    {
+      "file": "settings-race-tests.cjs",
+      "passed": true,
+      "output": "PASS: delayed settings block auto/manual start, failures block start until corrected, rapid changes retain order"
+    },
+    {
+      "file": "streaming-tests.cjs",
+      "passed": true,
+      "output": "PASS: streamed objects, escaped strings, truncation, current job, invalid IDs, duplicate rejection, skip and code fences"
+    },
+    {
+      "file": "tests.cjs",
+      "passed": true,
+      "output": "PASS: manual jumps/backtracking, range/auth/stale checks, sent-state preservation and skipped-job completion; syntax, episode URL filtering, complete split coverage, coordinate mapping, queue advance, wrong-job rejection, page navigation rejection, cache cleanup, access restrictions"
+    },
+    {
+      "file": "text-tests.cjs",
+      "passed": true,
+      "output": "PASS: whole-episode text batching, safety splitting with order preservation, strict ID completeness, fixed coordinates, fragmented-line grouping"
+    },
+    {
+      "file": "ui-i18n-tests.cjs",
+      "passed": true,
+      "output": "PASS: saved UI locale, invariant LANGUAGE label/native options, live progress, reversible switching, namespace isolation, unchanged prompts/JSON/translations, stable observer and settings validation"
+    },
+    {
+      "file": "webgpu-tests.cjs",
+      "passed": true,
+      "output": "PASS: GPU warmup, input/output disposal, no-GPU and startup fallback, device-loss retry with preserved input, strict GPU mode and CPU mode"
+    }
+  ]
+}

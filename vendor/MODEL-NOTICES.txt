@@ -1,0 +1,16 @@
+Comic text and bubble detector
+Author: ogkalu
+https://huggingface.co/ogkalu/comic-text-and-bubble-detector
+Revision: 16e8a62
+File: detector_int8.onnx
+Model card license: Apache-2.0
+ONNX Runtime Web 1.23.2: MIT; see ORT-LICENSE.
+
+WebGPU model: detector.onnx (FP32), same author, revision 16e8a62, Apache-2.0.
+GPU runtime: ONNX Runtime Web 1.23.2 ort.webgpu.min.js with asyncify wasm module; MIT.
+
+Distribution modifications: bundled detector_fp32.onnx is a derivative with static 1x3x640x640 input, graph simplification, and raw score/box outputs. TopK/coordinate postprocessing is performed in JavaScript. See conversion/ and MODEL-OPTIMIZATION.json. CPU detector_int8.onnx is retained separately.
+
+CPU 1.1.12 derivative: detector_int8_static.onnx, static 1x3x640x640 input, integer-only shape folding, raw score/box outputs; trained weights unchanged. Original detector_int8.onnx retained in development folder, excluded from ZIP.
+
+1.1.13 GPU derivative: backbone and encoder weights/activations converted to FP16, explicit precision boundary casts; decoder, postprocessor and IO remain FP32. See GPU-MODEL-OPTIMIZATION.json. CPU INT8 model remains the 1.1.12 optimized derivative.

@@ -1,0 +1,43 @@
+# Manga Translator 1.0
+
+[日本語](README.md)
+
+A Chrome extension that detects text regions locally on NAVER WEBTOON, creates numbered crop collages, asks ChatGPT or Gemini to read and translate them, and overlays the translations on the comic.
+
+## Install
+
+Download and extract manga-translator-1.0.0.zip from Releases. In chrome://extensions, enable Developer mode, choose Load unpacked and select the extracted folder. Reload existing comic and AI pages.
+
+For source installation, clone this repository, run git lfs pull, and load the repository root. GitHub-generated source archives may contain model pointers; use the dedicated release ZIP for bundled model weights.
+
+## Use
+
+Sign in to your chosen AI, open an episode on NAVER WEBTOON, select source/target languages, AI and batch mode, then click the automatic translation button. The first completed collage is submitted while the remaining images are prepared. Complete items are previewed during generation and confirmed against the final reply. Missing IDs use retry collages of up to 12 regions, with at most three retries per ID. Manual image/prompt preparation and JSON import are also available.
+
+The AI is asked to return IDs and translations without source text. Legacy replies containing original text remain supported. Provisional overlays are not persisted and disappear on comic-page reload.
+
+## Settings
+
+- Japanese/English UI, selectable source/target languages.
+- Accuracy, balanced (default), or fewer-image batch modes.
+- Translation memory / custom instructions: up to 4,000 characters, saved automatically on this device across titles. Frozen when episode preparation starts, reused for all batches/retries. Clear the field to disable future use. Included in prompts to the selected AI. No automatic learning from previous translations.
+- ChatGPT temporary chat (default) or normal chat.
+- GPU with CPU fallback (default) or CPU only, FP32/partial FP16.
+- Graph Capture auto/off/on. Auto enables it only for AMD with partial FP16; failed startup checks retry without it. FP32 always uses Capture off.
+- Detection diagnostics and mean/last AI response times in the AI panel.
+
+## Development
+
+Requires Node.js, Python 3 and Git LFS.
+
+~~~sh
+git lfs pull
+python3 scripts/test_extension.py
+python3 scripts/package_extension.py --output dist
+~~~
+
+Includes 30 test suites plus JavaScript syntax checks. Tests cover simulated DOM/message flows, not every live AI-site behavior or model-accuracy case. AI site changes and account limits can interrupt automation.
+
+See [MODEL.md](MODEL.md), [PRIVACY.md](PRIVACY.md) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). No license has been selected for original code. Third-party licenses remain applicable. This is not an official ChatGPT, Gemini, NAVER or Chrome product. Service terms and content rights apply separately.
+
+Version 1.0.0 is the starting point of this repository history. The repository remains private.
