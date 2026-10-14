@@ -4,6 +4,10 @@
 
 NAVER WEBTOONの文字領域を端末内で検出し、番号付きの切り抜き画像をChatGPTまたはGeminiで翻訳して、漫画上に訳文を重ねるChrome拡張機能です。モデルは文章の位置を検出するもので、文字起こしと翻訳は選択したAIが担当します。
 
+## 利用上の注意
+
+**本拡張機能は、利用者自身の責任で使用してください。** 各AIサービス・配信サイトの利用規約とコンテンツの権利を確認したうえで利用してください。翻訳の正確性、自動操作の継続動作、アカウントの安全性は保証しません。
+
 ## インストール
 
 1. [Releases](https://github.com/okinisu/manga-translator-extension/releases/latest)から専用ZIP（例：manga-translator-1.0.0.zip）をダウンロードして展開します。

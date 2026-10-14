@@ -4,6 +4,10 @@
 
 A Chrome extension that detects text regions locally on NAVER WEBTOON, creates numbered crop collages, asks ChatGPT or Gemini to read and translate them, and overlays the translations on the comic.
 
+## Use at your own risk
+
+**Use this extension at your own risk and responsibility.** Check the terms of the AI services and content platforms you use, and ensure you have the necessary rights to the content. Translation accuracy, continued operation of automation, and account safety are not guaranteed.
+
 ## Install
 
 Download and extract the dedicated extension ZIP from [Releases](https://github.com/okinisu/manga-translator-extension/releases/latest). In chrome://extensions, enable Developer mode, choose Load unpacked and select the extracted folder. Reload existing comic and AI pages.
