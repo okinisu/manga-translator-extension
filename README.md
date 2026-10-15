@@ -44,14 +44,14 @@ Gitと[Git LFS](https://git-lfs.com/)をインストールしてから、ター�
 
 ~~~sh
 git lfs install
-git clone https://github.com/okinisu/manga-translator-extension.git "$HOME/manga-translator-extension"
-cd "$HOME/manga-translator-extension"
+git clone https://github.com/okinisu/manga-translator-extension.git "$HOME/Downloads/manga-translator-extension"
+cd "$HOME/Downloads/manga-translator-extension"
 git lfs pull
 ~~~
 
-Chromeの `chrome://extensions` でデベロッパーモードを有効にし、`manifest.json` のある `~/manga-translator-extension` を「パッケージ化されていない拡張機能を読み込む」で選択します。`popup.html` を直接開いても拡張機能としては動作しません。GitHubの自動生成ソースZIPでは、モデルがLFSポインターになっている場合があります。Releasesの専用ZIPには実際のモデルを含めます。
+Chromeの `chrome://extensions` でデベロッパーモードを有効にし、`manifest.json` のある `~/Downloads/manga-translator-extension` を「パッケージ化されていない拡張機能を読み込む」で選択します。`popup.html` を直接開いても拡張機能としては動作しません。GitHubの自動生成ソースZIPでは、モデルがLFSポインターになっている場合があります。Releasesの専用ZIPには実際のモデルを含めます。
 
-WindowsのPowerShellでは `"$HOME/manga-translator-extension"` を `"$HOME\manga-translator-extension"` に読み替え、実際の取得先に合わせてください。
+WindowsのPowerShellでは `"$HOME/Downloads/manga-translator-extension"` を `"$HOME\Downloads\manga-translator-extension"` に読み替え、実際の取得先に合わせてください。
 
 ソース版の更新は、取得済みのリポジトリのルートで次を実行します。ローカルで変更している場合は、先にその内容を保存・整理してください。
 
@@ -118,10 +118,10 @@ npm install -g --ignore-scripts @earendil-works/pi-coding-agent
 pi
 ~~~
 
-Piが起動したら、Piの入力欄で `/login` を実行し、利用するAIサービスの認証を完了します。その後、別のターミナルで **この拡張機能のルート**（`manifest.json` と `scripts/` があるフォルダ）へ移動します。ソースを `~/manga-translator-extension` に取得した場合の例：
+Piが起動したら、Piの入力欄で `/login` を実行し、利用するAIサービスの認証を完了します。その後、別のターミナルで **この拡張機能のルート**（`manifest.json` と `scripts/` があるフォルダ）へ移動します。ソースを `~/Downloads/manga-translator-extension` に取得した場合の例：
 
 ~~~sh
-cd "$HOME/manga-translator-extension"
+cd "$HOME/Downloads/manga-translator-extension"
 node scripts/pi-bridge.mjs
 ~~~
 

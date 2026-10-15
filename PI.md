@@ -29,7 +29,7 @@ Pi内で利用する接続先（Codexの契約・ログインを使う場合はO
 
 ## 3. 拡張機能のフォルダでブリッジを起動・接続キーを発行する
 
-以下のコマンド例はLinux/macOSのbash・zsh向けです。Windows PowerShellではパスを `"$HOME\manga-translator-extension"` のように読み替えてください。
+以下のコマンド例はLinux/macOSのbash・zsh向けです。Windows PowerShellではパスを `"$HOME\Downloads\manga-translator-extension"` のように読み替えてください。
 
 Piを起動した画面とは別のターミナルを開きます。**拡張機能を読み込んだフォルダのルート（`manifest.json` と `scripts` フォルダがある場所）へ `cd` してから**起動してください。`scripts` フォルダ自体に移動するのではありません。
 
@@ -37,16 +37,16 @@ Piを起動した画面とは別のターミナルを開きます。**拡張機�
 
 ~~~sh
 git lfs install
-git clone https://github.com/okinisu/manga-translator-extension.git "$HOME/manga-translator-extension"
-cd "$HOME/manga-translator-extension"
+git clone https://github.com/okinisu/manga-translator-extension.git "$HOME/Downloads/manga-translator-extension"
+cd "$HOME/Downloads/manga-translator-extension"
 git lfs pull
 node scripts/pi-bridge.mjs
 ~~~
 
-取得・展開済みの場合は、そのフォルダに置き換えます。例では展開先を `~/Downloads/manga-translator` としています。
+取得・展開済みの場合は、そのフォルダに置き換えます。例では展開先を `~/Downloads/manga-translator-extension` としています。
 
 ~~~sh
-cd "$HOME/Downloads/manga-translator"
+cd "$HOME/Downloads/manga-translator-extension"
 node scripts/pi-bridge.mjs
 ~~~
 
@@ -81,14 +81,14 @@ Pi uses the selected provider's free tier, subscription allowance or paid API bi
 
 1. On the same PC as Chrome, install Node.js 22.19+ with npm. From any terminal folder, run `npm install -g --ignore-scripts @earendil-works/pi-coding-agent`, then check `pi --version`. See the [official Pi installation guide](https://github.com/earendil-works/pi#getting-started) for alternatives.
 2. Run `pi`, then enter `/login` **inside Pi**, not in your shell. Select your provider and complete its subscription login or API-key setup. This provider authentication is separate from the bridge connection key.
-3. Open another terminal and change to the **extension root folder containing `manifest.json` and `scripts/`**, using the actual path where you cloned or extracted this extension. Shell examples use Linux/macOS bash or zsh; Windows PowerShell paths can use `"$HOME\manga-translator-extension"`.
+3. Open another terminal and change to the **extension root folder containing `manifest.json` and `scripts/`**, using the actual path where you cloned or extracted this extension. Shell examples use Linux/macOS bash or zsh; Windows PowerShell paths can use `"$HOME\Downloads\manga-translator-extension"`.
 
    ~~~sh
-   cd "$HOME/manga-translator-extension"
+   cd "$HOME/Downloads/manga-translator-extension"
    node scripts/pi-bridge.mjs
    ~~~
 
-   For a fresh source checkout, install Git LFS and run `git lfs install`, then run `git clone https://github.com/okinisu/manga-translator-extension.git "$HOME/manga-translator-extension"`, change into that directory and run `git lfs pull`. Do not run the bridge from an old copy or a folder in Trash.
+   For a fresh source checkout, install Git LFS and run `git lfs install`, then run `git clone https://github.com/okinisu/manga-translator-extension.git "$HOME/Downloads/manga-translator-extension"`, change into that directory and run `git lfs pull`. Do not run the bridge from an old copy or a folder in Trash.
 
 4. Startup automatically prints the local bridge address and `Connection key: ...`. Paste the value after that label into the extension's Pi connection settings, then click Connect & refresh models. Do not paste the provider's login code or API key. Keep the bridge terminal running; Ctrl+C in that terminal stops it. Each restart generates a new key, which must be pasted again.
 5. Select Pi as the AI, choose a vision model and a thinking level, and start automatic translation. Leave the review tab open. Thinking levels are passed to Pi and may be clamped to the selected model's capabilities.

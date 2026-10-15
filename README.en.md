@@ -37,14 +37,14 @@ Install Git and [Git LFS](https://git-lfs.com/), then run the following in a ter
 
 ~~~sh
 git lfs install
-git clone https://github.com/okinisu/manga-translator-extension.git "$HOME/manga-translator-extension"
-cd "$HOME/manga-translator-extension"
+git clone https://github.com/okinisu/manga-translator-extension.git "$HOME/Downloads/manga-translator-extension"
+cd "$HOME/Downloads/manga-translator-extension"
 git lfs pull
 ~~~
 
-In `chrome://extensions`, enable Developer mode and load `~/manga-translator-extension`, the folder containing `manifest.json`, using Load unpacked. Opening `popup.html` as a local file does not run it as an extension. GitHub-generated source archives may contain model pointers; dedicated release ZIPs include actual model weights.
+In `chrome://extensions`, enable Developer mode and load `~/Downloads/manga-translator-extension`, the folder containing `manifest.json`, using Load unpacked. Opening `popup.html` as a local file does not run it as an extension. GitHub-generated source archives may contain model pointers; dedicated release ZIPs include actual model weights.
 
-For Windows PowerShell, use `"$HOME\manga-translator-extension"` instead of `"$HOME/manga-translator-extension"`, adjusting it to your actual checkout location.
+For Windows PowerShell, use `"$HOME\Downloads\manga-translator-extension"` instead of `"$HOME/Downloads/manga-translator-extension"`, adjusting it to your actual checkout location.
 
 To update a source checkout, run the following from its root folder after saving or resolving any local changes:
 
@@ -99,10 +99,10 @@ npm install -g --ignore-scripts @earendil-works/pi-coding-agent
 pi
 ~~~
 
-Enter `/login` inside Pi and authenticate with your chosen provider. Then open another terminal and **change into this extension's root folder containing `manifest.json` and `scripts/`**. If you cloned it to `~/manga-translator-extension`:
+Enter `/login` inside Pi and authenticate with your chosen provider. Then open another terminal and **change into this extension's root folder containing `manifest.json` and `scripts/`**. If you cloned it to `~/Downloads/manga-translator-extension`:
 
 ~~~sh
-cd "$HOME/manga-translator-extension"
+cd "$HOME/Downloads/manga-translator-extension"
 node scripts/pi-bridge.mjs
 ~~~
 
