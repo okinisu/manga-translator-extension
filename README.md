@@ -125,6 +125,17 @@ cd "$HOME/Downloads/manga-translator-extension"
 node scripts/pi-bridge.mjs
 ~~~
 
-展開先が違う場合は `cd` のパスを置き換えてください。起動時に表示される `Connection key:` の値が、拡張機能の「Pi 接続」→「接続キー」に貼るキーです。AIサービスのログインコードとは別です。翻訳中はブリッジを起動したターミナルを開いたままにしてください。
+WindowsのPowerShellでは、実行場所に依存しない次の方法も使えます。Node.jsのインストールフォルダに拡張機能のスクリプトが入っているわけではありません。
+
+~~~powershell
+$bridge = Join-Path $HOME 'Downloads\manga-translator-extension\scripts\pi-bridge.mjs'
+if (Test-Path -LiteralPath $bridge -PathType Leaf) {
+    node $bridge
+} else {
+    Write-Error "拡張機能のスクリプトが見つかりません。展開先を確認してください: $bridge"
+}
+~~~
+
+展開先が違う場合は `cd` や `$bridge` のパスを置き換えてください。フォルダ名が `manga-translator-extension-main` などの場合も実際の名前に合わせます。起動時に表示される `Connection key:` の値が、拡張機能の「Pi 接続」→「接続キー」に貼るキーです。AIサービスのログインコードとは別です。翻訳中はブリッジを起動したターミナルを開いたままにしてください。
 
 [Piの導入・ログイン・接続キー発行の詳しい手順](PI.md)

@@ -50,6 +50,19 @@ cd "$HOME/Downloads/manga-translator-extension"
 node scripts/pi-bridge.mjs
 ~~~
 
+WindowsのPowerShellでは、現在のフォルダを移動せず、スクリプトのフルパスで起動する方法もあります。
+
+~~~powershell
+$bridge = Join-Path $HOME 'Downloads\manga-translator-extension\scripts\pi-bridge.mjs'
+if (Test-Path -LiteralPath $bridge -PathType Leaf) {
+    node $bridge
+} else {
+    Write-Error "拡張機能のスクリプトが見つかりません。展開先を確認してください: $bridge"
+}
+~~~
+
+`Cannot find module ...\scripts\pi-bridge.mjs` は、指定場所にスクリプトがないというエラーです。例えば `C:\applist\node-v24.22.0-x64` で `node scripts/pi-bridge.mjs` を実行すると、Node.jsのフォルダ内を探してしまいます。上の `$bridge` を、実際に拡張機能を展開したフォルダに合わせてください。フォルダ名が `manga-translator-extension-main` などならその部分も変更します。ファイル自体がない場合はPi対応のmainソース版を取得し直してください。
+
 成功すると、ターミナルに `Pi bridge: http://127.0.0.1:43129` と `Connection key: ...` が表示されます。この起動時に接続キーが自動生成されるため、別途コードを発行する操作はありません。翻訳中はこのターミナルを開いたままにします。停止する場合は、このコマンドを実行したターミナルでCtrl+Cを押します。
 
 ## 4. 拡張機能に接続する

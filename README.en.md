@@ -106,6 +106,17 @@ cd "$HOME/Downloads/manga-translator-extension"
 node scripts/pi-bridge.mjs
 ~~~
 
-Replace the path with your actual clone/extraction folder. Startup automatically prints `Connection key: ...`; paste that key into the extension's Pi connection settings. This is separate from the provider's login code or API key. Keep the bridge terminal open during translation.
+For Windows PowerShell, this absolute-path approach also works from any current directory. The extension script is not installed in the Node.js installation folder.
+
+~~~powershell
+$bridge = Join-Path $HOME 'Downloads\manga-translator-extension\scripts\pi-bridge.mjs'
+if (Test-Path -LiteralPath $bridge -PathType Leaf) {
+    node $bridge
+} else {
+    Write-Error "Extension script not found. Check your extraction folder: $bridge"
+}
+~~~
+
+Replace the `cd` or `$bridge` path with your actual clone/extraction folder, including its actual name (for example, `manga-translator-extension-main`). Startup automatically prints `Connection key: ...`; paste that key into the extension's Pi connection settings. This is separate from the provider's login code or API key. Keep the bridge terminal open during translation.
 
 [Complete Pi installation, login and connection-key guide](PI.md#english-setup)
