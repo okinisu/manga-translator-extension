@@ -95,7 +95,7 @@ npm install -g --ignore-scripts @earendil-works/pi-coding-agent
 pi
 ~~~
 
-Piが起動したら、Piの入力欄で `/login` を実行し、利用するAIサービスの認証を完了します。その後、別のターミナルで**この拡張機能のルート（`manifest.json` と `scripts/` があるフォルダ）**へ移動します。ソースを `~/manga-translator-extension` に取得した場合の例：
+Piが起動したら、Piの入力欄で `/login` を実行し、利用するAIサービスの認証を完了します。その後、別のターミナルで **この拡張機能のルート**（`manifest.json` と `scripts/` があるフォルダ）へ移動します。ソースを `~/manga-translator-extension` に取得した場合の例：
 
 ~~~sh
 cd "$HOME/manga-translator-extension"
