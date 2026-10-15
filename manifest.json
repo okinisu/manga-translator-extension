@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "漫画翻訳 / Manga Translator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "漫画の文字領域を検出し、ChatGPT・Gemini・Pi経由で自動翻訳して原文を覆います。",
   "permissions": [
     "activeTab",

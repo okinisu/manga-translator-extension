@@ -6,7 +6,7 @@
 
 初回はZIPを展開し、chrome://extensionsでデベロッパーモードを有効にしてフォルダーを読み込みます。使用するAIのページでログインしてから試してください。
 
-Pi連携はmainのソース版でテストします。既存のv1.0.0リリースZIPには含まれません。[READMEのソース導入手順](README.md)と[Pi設定手順](PI.md)に従って準備し、Piブリッジと確認用タブを開いたままにしてください。
+Pi連携はv1.0.1以降の専用ZIPまたはmainのソース版でテストします。[READMEの導入手順](README.md)と[Pi設定手順](PI.md)に従って準備し、Piブリッジと確認用タブを開いたままにしてください。
 
 更新時は既存の読み込み先を確認し、同じフォルダーへ新しいZIPの内容を上書きして拡張機能を再読み込みします。漫画ページとAIページも再読み込みしてください。拡張機能を削除して再追加すると、保存した設定やデータが消えます。
 
@@ -36,7 +36,7 @@ Download the dedicated ZIP from the [latest release](https://github.com/okinisu/
 
 For updates, replace files in the same folder currently loaded by Chrome, reload the extension and reload both comic/AI pages. Removing the extension first deletes extension-managed settings and data.
 
-For Pi testing, install the main branch source using the [README](README.en.md) and [Pi setup guide](PI.md#english-setup); Pi is not included in the existing v1.0.0 release ZIP. Keep the bridge and review tab open.
+For Pi testing, use a dedicated release ZIP from v1.0.1 or the main branch source. Follow the [README](README.en.md) and [Pi setup guide](PI.md#english-setup). Keep the bridge and review tab open.
 
 Check image preparation, major speech-bubble detection, attachment/send, streaming previews, final confirmation, missing-ID retries when they occur, episode cache, saved custom instructions, and CPU/GPU modes supported by your device. For browser providers, check resuming without duplicate sends and AI-tab reuse. For Pi, check cancellation and resubmission of the unfinished image on resume.
 

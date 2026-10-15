@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.0.1 — 2026-10-15
 
 - Optional local Pi RPC backend with authenticated loopback bridge, image input, streaming overlays and missing-ID retries.
 - Pi connection settings, live image-capable model selection and bilingual setup guide. Existing browser providers remain available.

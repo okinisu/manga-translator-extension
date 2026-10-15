@@ -1,4 +1,4 @@
-# 漫画翻訳 / Manga Translator 1.0
+# 漫画翻訳 / Manga Translator 1.0.1
 
 [English](README.en.md) · [ダウンロード](https://github.com/okinisu/manga-translator-extension/releases/latest) · [テスト手順](TESTING.md) · [不具合報告](https://github.com/okinisu/manga-translator-extension/issues/new/choose)
 
@@ -24,12 +24,12 @@ Piで選べるモデルがすべて無料という意味ではありません。
 ### 必要な環境・配布版の違い
 
 - デスクトップ版Chromeと、モデルファイルを含む拡張機能一式が必要です。GPUは必須ではなく、CPUのみでも動作します。
-- 既存のv1.0.0リリースZIPはChatGPT・Geminiのブラウザ連携用です。Pi連携を使う場合は、下記のmainのソース版を取得してください。どちらも拡張機能のバージョン表示は現時点では1.0.0です。
+- v1.0.1以降の専用リリースZIPにはPiブリッジも同梱しています。v1.0.0には含まれないため、Pi連携を使う場合は最新版へ更新してください。
 - 通常の拡張機能の利用にNode.jsやPythonは不要です。Pi連携には同じPC上のNode.js 22.19以降・Pi・起動中のブリッジが必要です。
 
-### リリースZIPから使う（ブラウザ連携）
+### リリースZIPから使う（Pi連携を含む）
 
-1. [Releases](https://github.com/okinisu/manga-translator-extension/releases/latest)から専用ZIP（例：manga-translator-1.0.0.zip）をダウンロードして展開します。
+1. [Releases](https://github.com/okinisu/manga-translator-extension/releases/latest)から専用ZIP（例：manga-translator-1.0.1.zip）をダウンロードして展開します。
 2. Chromeで chrome://extensions を開き、デベロッパーモードを有効にします。
 3. 「パッケージ化されていない拡張機能を読み込む」で展開したフォルダーを選択します。
 4. 漫画ページとAIページを開いていた場合は再読み込みします。
@@ -109,7 +109,7 @@ python3 scripts/package_extension.py --output dist
 
 ### Pi / Codex local connection
 
-Pi連携は現在mainのソース版に含まれます。既存の1.0.0リリースZIPには含まれないため、上記のソースからのインストール手順を使用してください。
+Pi連携はv1.0.1以降の専用リリースZIPとmainのソース版で利用できます。ZIPを展開したフォルダには `scripts/pi-bridge.mjs` が含まれています。
 
 Pi未導入の場合は、Node.js 22.19以降（npmを含む）を用意し、ターミナルの任意のフォルダで次を実行します。[Pi公式の導入手順](https://github.com/earendil-works/pi#getting-started)も参照してください。
 

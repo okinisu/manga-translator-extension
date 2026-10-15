@@ -1,4 +1,4 @@
-# Manga Translator 1.0
+# Manga Translator 1.0.1
 
 [日本語](README.md) · [Download](https://github.com/okinisu/manga-translator-extension/releases/latest) · [Testing](TESTING.md#english) · [Report a bug](https://github.com/okinisu/manga-translator-extension/issues/new/choose)
 
@@ -23,9 +23,9 @@ Not every model listed by Pi is free. Paid API settings or subscription plans ma
 
 Use desktop Chrome and the complete extension folder, including model weights. A GPU is optional; CPU-only detection is supported. Node.js and Python are not required for browser-based translation. Pi integration requires Node.js 22.19+, Pi and the running bridge on the same PC as Chrome.
 
-The existing v1.0.0 release ZIP supports ChatGPT/Gemini browser automation. To use Pi, install the main branch source below. Both currently show extension version 1.0.0, so the version number alone does not identify Pi support.
+Dedicated release ZIPs from v1.0.1 include the Pi bridge. The older v1.0.0 ZIP does not; update to the latest release to use Pi.
 
-### Release ZIP (browser providers)
+### Release ZIP (includes Pi)
 
 Download and extract the dedicated extension ZIP from [Releases](https://github.com/okinisu/manga-translator-extension/releases/latest). In chrome://extensions, enable Developer mode, choose Load unpacked and select the extracted folder. Reload existing comic and AI pages.
 
@@ -90,7 +90,7 @@ Version 1.0.0 is the starting point of this repository history and public testin
 
 ### Pi / Codex local connection
 
-Pi integration is currently available in the main branch source. The existing 1.0.0 release ZIP does not include it; use the source installation instructions above.
+Pi integration is included in dedicated release ZIPs from v1.0.1 and in the main branch source. The extracted folder contains `scripts/pi-bridge.mjs`.
 
 Install Node.js 22.19+ with npm, then run these commands from any terminal folder. See the [official Pi installation guide](https://github.com/earendil-works/pi#getting-started) for alternatives:
 
