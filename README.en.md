@@ -62,4 +62,20 @@ Version 1.0.0 is the starting point of this repository history and public testin
 
 Pi integration is currently available in the main branch source. The existing 1.0.0 release ZIP does not include it; use the source installation instructions above.
 
-[Pi連携の設定 / Setup guide](PI.md)
+Install Node.js 22.19+ with npm, then run these commands from any terminal folder:
+
+~~~sh
+npm install -g --ignore-scripts @earendil-works/pi-coding-agent
+pi
+~~~
+
+Enter `/login` inside Pi and authenticate with your chosen provider. Then open another terminal and **change into this extension's root folder containing `manifest.json` and `scripts/`**. If you cloned it to `~/manga-translator-extension`:
+
+~~~sh
+cd "$HOME/manga-translator-extension"
+node scripts/pi-bridge.mjs
+~~~
+
+Replace the path with your actual clone/extraction folder. Startup automatically prints `Connection key: ...`; paste that key into the extension's Pi connection settings. This is separate from the provider's login code or API key. Keep the bridge terminal open during translation.
+
+[Complete Pi installation, login and connection-key guide](PI.md#english-setup)

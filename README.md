@@ -88,4 +88,20 @@ python3 scripts/package_extension.py --output dist
 
 Pi連携は現在mainのソース版に含まれます。既存の1.0.0リリースZIPには含まれないため、上記のソースからのインストール手順を使用してください。
 
-[Pi連携の設定 / Setup guide](PI.md)
+Pi未導入の場合は、Node.js 22.19以降を用意し、ターミナルの任意のフォルダで次を実行します。
+
+~~~sh
+npm install -g --ignore-scripts @earendil-works/pi-coding-agent
+pi
+~~~
+
+Piが起動したら、Piの入力欄で `/login` を実行し、利用するAIサービスの認証を完了します。その後、別のターミナルで**この拡張機能のルート（`manifest.json` と `scripts/` があるフォルダ）**へ移動します。ソースを `~/manga-translator-extension` に取得した場合の例：
+
+~~~sh
+cd "$HOME/manga-translator-extension"
+node scripts/pi-bridge.mjs
+~~~
+
+展開先が違う場合は `cd` のパスを置き換えてください。起動時に表示される `Connection key:` の値が、拡張機能の「Pi 接続」→「接続キー」に貼るキーです。AIサービスのログインコードとは別です。翻訳中はブリッジを起動したターミナルを開いたままにしてください。
+
+[Piの導入・ログイン・接続キー発行の詳しい手順](PI.md)
