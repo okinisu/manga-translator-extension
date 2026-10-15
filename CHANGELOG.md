@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.2 — 2026-10-15
+
+- Launch npm-installed Pi on Windows through its Node.js entry point without a shell.
+- Keep model-discovery RPC input open until Pi returns its response.
+- Handle model-query stdin failures and report startup error/exit codes.
+- Add regression coverage for Windows npm shims and delayed model discovery.
+
 ## 1.0.1 — 2026-10-15
 
 - Optional local Pi RPC backend with authenticated loopback bridge, image input, streaming overlays and missing-ID retries.

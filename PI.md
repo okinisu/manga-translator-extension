@@ -76,6 +76,8 @@ if (Test-Path -LiteralPath $bridge -PathType Leaf) {
 
 「Pi接続OKですが、モデル一覧APIに未対応」またはHTTP 404が表示された場合、古いブリッジが43129番ポートを使っています。古い `node scripts/pi-bridge.mjs` プロセスを終了し、更新した拡張機能と同じ配布フォルダに含まれる `scripts/pi-bridge.mjs` を起動してください。起動のたびにConnection keyが変わるため、表示されたキーを貼り直します。
 
+モデル一覧の取得時にHTTP 502が出る場合は、v1.0.2以降へ更新してください。Windowsのnpm版Piの起動方法と、応答前にRPC入力を閉じていた処理を修正しています。拡張機能だけでなく、起動中の古いブリッジを終了して更新版フォルダから再起動し、新しい接続キーを貼り直します。それでも失敗する場合は、ブリッジと同じターミナルで `pi --version` を確認し、エラー全文を控えてください。PowerShellの `Get-Command pi -All` でPiの検出先を確認できます。接続キーやAPIキーは共有しないでください。
+
 各画像につき保存なし・ツールなしのPiプロセスを作成します。スキル、拡張、MCP、プロジェクトの指示ファイルも読み込みません。翻訳メモと直前の翻訳文脈は既存の依頼文に含まれます。逐次表示、最終JSON検証、欠落IDの最大12領域での再依頼は既存処理を利用します。
 
 停止すると通信とPi子プロセスを中断します。再開時は未確定の画像を再依頼します。上流で開始済みのリクエストの利用枠が返還される保証はありません。5分でタイムアウトします。「接続・モデル一覧を更新」ではブリッジへの接続・キー認証・Piの起動とモデル一覧取得を確認します。AIサービスへの実際の画像送信・推論が成功することまでは検証しません。
@@ -107,3 +109,5 @@ Pi uses the selected provider's free tier, subscription allowance or paid API bi
 5. Select Pi as the AI, choose a vision model and a thinking level, and start automatic translation. Leave the review tab open. Thinking levels are passed to Pi and may be clamped to the selected model's capabilities.
 
 The bridge binds only to 127.0.0.1:43129. Pi keeps its own provider credentials; the extension stores the bridge key, optional model ID, model-list cache and thinking-level preference locally. Empty model uses Pi's default. Each image uses an ephemeral RPC process with tools, extensions, MCP, skills and context-file discovery disabled. Responses stream into provisional overlays and become final only after Pi reports agent_settled and the extension validates the translation JSON. Stop cancels the process; resume resends the unfinished image. Connect & refresh models checks the bridge, key authentication, Pi startup and model discovery, but does not make a paid inference request or verify a live image response.
+
+If model discovery returns HTTP 502, update to v1.0.2+ and restart the bridge from the updated folder, then paste its new key. This fixes npm-installed Pi startup on Windows and premature RPC stdin closure. If it still fails, run `pi --version` in the bridge terminal, check `Get-Command pi -All` in PowerShell, and report the full error without credentials.

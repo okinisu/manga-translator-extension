@@ -1,4 +1,4 @@
-# 漫画翻訳 / Manga Translator 1.0.1
+# 漫画翻訳 / Manga Translator 1.0.2
 
 [English](README.en.md) · [ダウンロード](https://github.com/okinisu/manga-translator-extension/releases/latest) · [テスト手順](TESTING.md) · [不具合報告](https://github.com/okinisu/manga-translator-extension/issues/new/choose)
 
@@ -29,7 +29,7 @@ Piで選べるモデルがすべて無料という意味ではありません。
 
 ### リリースZIPから使う（Pi連携を含む）
 
-1. [Releases](https://github.com/okinisu/manga-translator-extension/releases/latest)から専用ZIP（例：manga-translator-1.0.1.zip）をダウンロードして展開します。
+1. [Releases](https://github.com/okinisu/manga-translator-extension/releases/latest)から専用ZIP（例：manga-translator-1.0.2.zip）をダウンロードして展開します。
 2. Chromeで chrome://extensions を開き、デベロッパーモードを有効にします。
 3. 「パッケージ化されていない拡張機能を読み込む」で展開したフォルダーを選択します。
 4. 漫画ページとAIページを開いていた場合は再読み込みします。

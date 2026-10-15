@@ -1,4 +1,4 @@
-# Manga Translator 1.0.1
+# Manga Translator 1.0.2
 
 [日本語](README.md) · [Download](https://github.com/okinisu/manga-translator-extension/releases/latest) · [Testing](TESTING.md#english) · [Report a bug](https://github.com/okinisu/manga-translator-extension/issues/new/choose)
 
