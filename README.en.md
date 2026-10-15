@@ -19,15 +19,45 @@ Not every model listed by Pi is free. Paid API settings or subscription plans ma
 
 ## Install
 
+### Requirements and distribution differences
+
+Use desktop Chrome and the complete extension folder, including model weights. A GPU is optional; CPU-only detection is supported. Node.js and Python are not required for browser-based translation. Pi integration requires Node.js 22.19+, Pi and the running bridge on the same PC as Chrome.
+
+The existing v1.0.0 release ZIP supports ChatGPT/Gemini browser automation. To use Pi, install the main branch source below. Both currently show extension version 1.0.0, so the version number alone does not identify Pi support.
+
+### Release ZIP (browser providers)
+
 Download and extract the dedicated extension ZIP from [Releases](https://github.com/okinisu/manga-translator-extension/releases/latest). In chrome://extensions, enable Developer mode, choose Load unpacked and select the extracted folder. Reload existing comic and AI pages.
 
 For updates, replace the files in the same folder currently loaded by Chrome, reload the extension, then reload comic and AI pages. Loading from another folder can create a separate extension with separate settings. See the [testing guide](TESTING.md#english).
 
-For source installation, clone this repository, run git lfs pull, and load the repository root. GitHub-generated source archives may contain model pointers; use the dedicated release ZIP for bundled model weights.
+### Main branch source (includes Pi)
+
+Install Git and [Git LFS](https://git-lfs.com/), then run the following in a terminal. Shell examples use Linux/macOS bash or zsh:
+
+~~~sh
+git lfs install
+git clone https://github.com/okinisu/manga-translator-extension.git "$HOME/manga-translator-extension"
+cd "$HOME/manga-translator-extension"
+git lfs pull
+~~~
+
+In `chrome://extensions`, enable Developer mode and load `~/manga-translator-extension`, the folder containing `manifest.json`, using Load unpacked. Opening `popup.html` as a local file does not run it as an extension. GitHub-generated source archives may contain model pointers; dedicated release ZIPs include actual model weights.
+
+For Windows PowerShell, use `"$HOME\manga-translator-extension"` instead of `"$HOME/manga-translator-extension"`, adjusting it to your actual checkout location.
+
+To update a source checkout, run the following from its root folder after saving or resolving any local changes:
+
+~~~sh
+git pull --ff-only
+git lfs pull
+~~~
+
+Reload the extension and comic/AI pages in Chrome. For Pi, stop the old bridge and restart it from the updated folder, then paste the newly generated Connection key into the extension.
 
 ## Use
 
-Sign in to your chosen AI, open an episode on NAVER WEBTOON, select source/target languages, AI and batch mode, then click the automatic translation button. The first completed collage is submitted while the remaining images are prepared. Complete items are previewed during generation and confirmed against the final reply. Missing IDs use retry collages of up to 12 regions, with at most three retries per ID. Manual image/prompt preparation and JSON import are also available.
+For browser providers, sign in to ChatGPT or Gemini. For Pi, complete the [Pi setup](PI.md#english-setup) and start the bridge first. Open an episode on NAVER WEBTOON, select source/target languages, AI and batch mode, then click the automatic translation button. The first completed collage is submitted while the remaining images are prepared. When streaming text is available, complete items are previewed during generation and confirmed against the final reply. Missing IDs use retry collages of up to 12 regions, with at most three retries per ID. If IDs remain missing, translation stops while retaining accepted items. Manual image/prompt preparation and JSON import are also available.
 
 The AI is asked to return IDs and translations without source text. Legacy replies containing original text remain supported. Provisional overlays are not persisted and disappear on comic-page reload.
 
@@ -40,11 +70,11 @@ The AI is asked to return IDs and translations without source text. Legacy repli
 - Pi connection key, image-capable model discovery/selection, and thinking level (Pi default or off through max). Supported levels depend on the model.
 - GPU with CPU fallback (default) or CPU only, FP32/partial FP16.
 - Graph Capture auto/off/on. Auto enables it only for AMD with partial FP16; failed startup checks retry without it. FP32 always uses Capture off.
-- Detection diagnostics and mean/last AI response times in the AI panel.
+- Detection diagnostics. Browser providers also show mean/last response times in the AI panel; those statistics do not cover Pi requests.
 
 ## Development
 
-Requires Node.js, Python 3 and Git LFS.
+Requires Node.js, Python 3 and Git LFS. Run the commands from the repository root.
 
 ~~~sh
 git lfs pull
@@ -62,7 +92,7 @@ Version 1.0.0 is the starting point of this repository history and public testin
 
 Pi integration is currently available in the main branch source. The existing 1.0.0 release ZIP does not include it; use the source installation instructions above.
 
-Install Node.js 22.19+ with npm, then run these commands from any terminal folder:
+Install Node.js 22.19+ with npm, then run these commands from any terminal folder. See the [official Pi installation guide](https://github.com/earendil-works/pi#getting-started) for alternatives:
 
 ~~~sh
 npm install -g --ignore-scripts @earendil-works/pi-coding-agent

@@ -21,6 +21,14 @@ Piで選べるモデルがすべて無料という意味ではありません。
 
 ## インストール
 
+### 必要な環境・配布版の違い
+
+- デスクトップ版Chromeと、モデルファイルを含む拡張機能一式が必要です。GPUは必須ではなく、CPUのみでも動作します。
+- 既存のv1.0.0リリースZIPはChatGPT・Geminiのブラウザ連携用です。Pi連携を使う場合は、下記のmainのソース版を取得してください。どちらも拡張機能のバージョン表示は現時点では1.0.0です。
+- 通常の拡張機能の利用にNode.jsやPythonは不要です。Pi連携には同じPC上のNode.js 22.19以降・Pi・起動中のブリッジが必要です。
+
+### リリースZIPから使う（ブラウザ連携）
+
 1. [Releases](https://github.com/okinisu/manga-translator-extension/releases/latest)から専用ZIP（例：manga-translator-1.0.0.zip）をダウンロードして展開します。
 2. Chromeで chrome://extensions を開き、デベロッパーモードを有効にします。
 3. 「パッケージ化されていない拡張機能を読み込む」で展開したフォルダーを選択します。
@@ -30,15 +38,29 @@ Piで選べるモデルがすべて無料という意味ではありません。
 
 詳しい確認項目は[テスト手順](TESTING.md)にまとめています。
 
-ソースから使う場合はGit LFSが必要です。
+### mainのソースから使う（Pi連携を含む）
+
+Gitと[Git LFS](https://git-lfs.com/)をインストールしてから、ターミナルで次を実行します。以下のシェルコマンド例はLinux/macOSのbash・zsh向けです。
 
 ~~~sh
-git clone https://github.com/okinisu/manga-translator-extension.git
-cd manga-translator-extension
+git lfs install
+git clone https://github.com/okinisu/manga-translator-extension.git "$HOME/manga-translator-extension"
+cd "$HOME/manga-translator-extension"
 git lfs pull
 ~~~
 
-リポジトリのルートを拡張機能として読み込めます。GitHubの自動生成ソースZIPでは、モデルがLFSポインターになっている場合があります。Releasesの専用ZIPには実際のモデルを含めます。
+Chromeの `chrome://extensions` でデベロッパーモードを有効にし、`manifest.json` のある `~/manga-translator-extension` を「パッケージ化されていない拡張機能を読み込む」で選択します。`popup.html` を直接開いても拡張機能としては動作しません。GitHubの自動生成ソースZIPでは、モデルがLFSポインターになっている場合があります。Releasesの専用ZIPには実際のモデルを含めます。
+
+WindowsのPowerShellでは `"$HOME/manga-translator-extension"` を `"$HOME\manga-translator-extension"` に読み替え、実際の取得先に合わせてください。
+
+ソース版の更新は、取得済みのリポジトリのルートで次を実行します。ローカルで変更している場合は、先にその内容を保存・整理してください。
+
+~~~sh
+git pull --ff-only
+git lfs pull
+~~~
+
+その後、Chromeで拡張機能と漫画・AIページを再読み込みします。Piを使っている場合は、古いブリッジを終了し、更新したフォルダから再起動してください。Connection keyが再生成されるため、拡張機能へ貼り直します。
 
 ## 使い方
 
@@ -46,7 +68,7 @@ git lfs pull
 2. NAVER WEBTOONの話ページで拡張機能メニューを開きます。
 3. 翻訳元・翻訳先・AI・バッチのまとめ方を選びます。
 4. 「裏で全自動翻訳 / 再開」を押します。画像準備と文字検出を進め、最初の翻訳画像が完成した時点でAIへ依頼します。
-5. 生成中も完成したIDの訳文を仮表示し、最終返答で確定します。欠落IDのみ最大12領域の画像で再依頼します。
+5. 生成途中の返答を取得できる場合、完成したIDの訳文を仮表示し、最終返答で確定します。欠落IDのみ最大12領域の画像で再依頼します。再依頼はIDごとに最大3回で、それでも欠落する場合は反映済みの訳文を保持して停止します。
 
 手動では「この話を翻訳する準備」から切り抜き画像・依頼文を作成できます。AIの返答JSONを確認画面へ貼り付ける方法にも対応します。生成中の仮表示は保存せず、生成完了後の確定訳を保存します。停止中の仮表示は漫画ページの再読み込みで消えます。
 
@@ -61,15 +83,16 @@ git lfs pull
 - 検出：GPU＋CPU併用（標準）またはCPUのみ。GPUが利用できない場合はCPUへ切り替えます。
 - GPU精度：部分FP16またはFP32。GPU選択はブラウザが決めます。
 - Graph Capture：自動・無効・有効（試験用）。自動ではAMDの部分FP16だけで有効になります。起動検証に失敗すると無効で再試行します。FP32では無効です。
-- 診断：検出工程の時間・並列状況、AI小窓での平均応答時間を確認できます。
+- 診断：検出工程の時間・並列状況を確認できます。ブラウザ連携ではAI小窓で平均応答時間も確認できます。Piの応答時間はこの小窓の集計対象外です。
 
 AI返答は原文を省いたIDと訳文のみを要求します。旧形式の原文付きJSONも取り込めます。原文は新しい返答では保存されません。
 
 ## 開発・検証
 
-Node.js、Python 3、Git LFSを使用します。
+Node.js、Python 3、Git LFSを使用します。コマンドはリポジトリのルートで実行します。
 
 ~~~sh
+git lfs pull
 python3 scripts/test_extension.py
 python3 scripts/package_extension.py --output dist
 ~~~
@@ -88,7 +111,7 @@ python3 scripts/package_extension.py --output dist
 
 Pi連携は現在mainのソース版に含まれます。既存の1.0.0リリースZIPには含まれないため、上記のソースからのインストール手順を使用してください。
 
-Pi未導入の場合は、Node.js 22.19以降を用意し、ターミナルの任意のフォルダで次を実行します。
+Pi未導入の場合は、Node.js 22.19以降（npmを含む）を用意し、ターミナルの任意のフォルダで次を実行します。[Pi公式の導入手順](https://github.com/earendil-works/pi#getting-started)も参照してください。
 
 ~~~sh
 npm install -g --ignore-scripts @earendil-works/pi-coding-agent

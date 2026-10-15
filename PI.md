@@ -29,11 +29,14 @@ Pi内で利用する接続先（Codexの契約・ログインを使う場合はO
 
 ## 3. 拡張機能のフォルダでブリッジを起動・接続キーを発行する
 
+以下のコマンド例はLinux/macOSのbash・zsh向けです。Windows PowerShellではパスを `"$HOME\manga-translator-extension"` のように読み替えてください。
+
 Piを起動した画面とは別のターミナルを開きます。**拡張機能を読み込んだフォルダのルート（`manifest.json` と `scripts` フォルダがある場所）へ `cd` してから**起動してください。`scripts` フォルダ自体に移動するのではありません。
 
 初めてソースを取得する場合の例（GitとGit LFSが必要）：
 
 ~~~sh
+git lfs install
 git clone https://github.com/okinisu/manga-translator-extension.git "$HOME/manga-translator-extension"
 cd "$HOME/manga-translator-extension"
 git lfs pull
@@ -62,7 +65,7 @@ node scripts/pi-bridge.mjs
 
 各画像につき保存なし・ツールなしのPiプロセスを作成します。スキル、拡張、MCP、プロジェクトの指示ファイルも読み込みません。翻訳メモと直前の翻訳文脈は既存の依頼文に含まれます。逐次表示、最終JSON検証、欠落IDの最大12領域での再依頼は既存処理を利用します。
 
-停止すると通信とPi子プロセスを中断します。再開時は未確定の画像を再依頼します。上流で開始済みのリクエストの利用枠が返還される保証はありません。5分でタイムアウトします。接続確認はHTTP接続のみで、AI認証・モデルの画像対応を検証するものではありません。
+停止すると通信とPi子プロセスを中断します。再開時は未確定の画像を再依頼します。上流で開始済みのリクエストの利用枠が返還される保証はありません。5分でタイムアウトします。「接続・モデル一覧を更新」ではブリッジへの接続・キー認証・Piの起動とモデル一覧取得を確認します。AIサービスへの実際の画像送信・推論が成功することまでは検証しません。
 
 Pi連携はローカルサーバーの常時起動が必要です。サービスの利用条件は、選択した接続方式に応じて確認してください。
 
@@ -78,16 +81,16 @@ Pi uses the selected provider's free tier, subscription allowance or paid API bi
 
 1. On the same PC as Chrome, install Node.js 22.19+ with npm. From any terminal folder, run `npm install -g --ignore-scripts @earendil-works/pi-coding-agent`, then check `pi --version`. See the [official Pi installation guide](https://github.com/earendil-works/pi#getting-started) for alternatives.
 2. Run `pi`, then enter `/login` **inside Pi**, not in your shell. Select your provider and complete its subscription login or API-key setup. This provider authentication is separate from the bridge connection key.
-3. Open another terminal and change to the **extension root folder containing `manifest.json` and `scripts/`**, using the actual path where you cloned or extracted this extension. For example:
+3. Open another terminal and change to the **extension root folder containing `manifest.json` and `scripts/`**, using the actual path where you cloned or extracted this extension. Shell examples use Linux/macOS bash or zsh; Windows PowerShell paths can use `"$HOME\manga-translator-extension"`.
 
-~~~sh
-cd "$HOME/manga-translator-extension"
-node scripts/pi-bridge.mjs
-~~~
+   ~~~sh
+   cd "$HOME/manga-translator-extension"
+   node scripts/pi-bridge.mjs
+   ~~~
 
-For a fresh source checkout, first run `git clone https://github.com/okinisu/manga-translator-extension.git "$HOME/manga-translator-extension"`, change into that directory and run `git lfs pull`. Git LFS is required. Do not run the bridge from an old copy or a folder in Trash.
+   For a fresh source checkout, install Git LFS and run `git lfs install`, then run `git clone https://github.com/okinisu/manga-translator-extension.git "$HOME/manga-translator-extension"`, change into that directory and run `git lfs pull`. Do not run the bridge from an old copy or a folder in Trash.
 
 4. Startup automatically prints the local bridge address and `Connection key: ...`. Paste the value after that label into the extension's Pi connection settings, then click Connect & refresh models. Do not paste the provider's login code or API key. Keep the bridge terminal running; Ctrl+C in that terminal stops it. Each restart generates a new key, which must be pasted again.
 5. Select Pi as the AI, choose a vision model and a thinking level, and start automatic translation. Leave the review tab open. Thinking levels are passed to Pi and may be clamped to the selected model's capabilities.
 
-The bridge binds only to 127.0.0.1:43129. Pi keeps its own provider credentials; the extension stores only the bridge key and optional model ID. Empty model uses Pi's default. Each image uses an ephemeral RPC process with tools, extensions, MCP, skills and context-file discovery disabled. Responses stream into provisional overlays and become final only after Pi reports agent_settled and the extension validates the translation JSON. Stop cancels the process; resume resends the unfinished image.
+The bridge binds only to 127.0.0.1:43129. Pi keeps its own provider credentials; the extension stores the bridge key, optional model ID, model-list cache and thinking-level preference locally. Empty model uses Pi's default. Each image uses an ephemeral RPC process with tools, extensions, MCP, skills and context-file discovery disabled. Responses stream into provisional overlays and become final only after Pi reports agent_settled and the extension validates the translation JSON. Stop cancels the process; resume resends the unfinished image. Connect & refresh models checks the bridge, key authentication, Pi startup and model discovery, but does not make a paid inference request or verify a live image response.

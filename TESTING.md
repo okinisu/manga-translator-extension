@@ -6,6 +6,8 @@
 
 初回はZIPを展開し、chrome://extensionsでデベロッパーモードを有効にしてフォルダーを読み込みます。使用するAIのページでログインしてから試してください。
 
+Pi連携はmainのソース版でテストします。既存のv1.0.0リリースZIPには含まれません。[READMEのソース導入手順](README.md)と[Pi設定手順](PI.md)に従って準備し、Piブリッジと確認用タブを開いたままにしてください。
+
 更新時は既存の読み込み先を確認し、同じフォルダーへ新しいZIPの内容を上書きして拡張機能を再読み込みします。漫画ページとAIページも再読み込みしてください。拡張機能を削除して再追加すると、保存した設定やデータが消えます。
 
 ## 確認してほしい項目
@@ -15,8 +17,8 @@
 3. 使用するAI・翻訳元・翻訳先を選び、全自動翻訳を実行する。画像が添付されて送信されるか確認する。
 4. 生成中に訳文が順次仮表示され、最終返答で確定するか確認する。
 5. IDの欠落が起きた場合、欠落分だけの小さい画像で再依頼されるか確認する。欠落はテストのために作る必要はありません。
-6. 処理を停止・再開して、送信済みの画像が重複送信されないか確認する。
-7. 次の話でもAIタブを再利用できるか、準備済みの画像・検出キャッシュを利用できるか確認する。
+6. 処理を停止・再開する。ブラウザ連携では送信済み依頼を再送せず返答を取り込めるか、Pi連携では中断した未確定画像を再依頼できるか確認する。
+7. ブラウザ連携では次の話でもAIタブを再利用できるか確認する。各接続方式で準備済みの画像・検出キャッシュを利用できるか確認する。
 8. 翻訳メモを入力し、メニューを開き直して保存されているか、新しく準備した話の依頼文に入るか確認する。
 9. 必要に応じてCPUのみ、GPUのFP32・FP16を比較する。GPUが利用できない場合のCPU切り替えも確認する。
 
@@ -34,6 +36,8 @@ Download the dedicated ZIP from the [latest release](https://github.com/okinisu/
 
 For updates, replace files in the same folder currently loaded by Chrome, reload the extension and reload both comic/AI pages. Removing the extension first deletes extension-managed settings and data.
 
-Check image preparation, major speech-bubble detection, attachment/send, streaming previews, final confirmation, missing-ID retries when they occur, pause/resume without duplicate sends, AI-tab reuse, episode cache, saved custom instructions, and CPU/GPU modes supported by your device.
+For Pi testing, install the main branch source using the [README](README.en.md) and [Pi setup guide](PI.md#english-setup); Pi is not included in the existing v1.0.0 release ZIP. Keep the bridge and review tab open.
+
+Check image preparation, major speech-bubble detection, attachment/send, streaming previews, final confirmation, missing-ID retries when they occur, episode cache, saved custom instructions, and CPU/GPU modes supported by your device. For browser providers, check resuming without duplicate sends and AI-tab reuse. For Pi, check cancellation and resubmission of the unfinished image on resume.
 
 Report version, Chrome/OS/GPU, chosen AI, relevant settings, reproduction steps and the exact error in [Issues](https://github.com/okinisu/manga-translator-extension/issues/new/choose). Timing diagnostics can help with performance reports. Review diagnostic files before sharing. Do not upload credentials, cookies, tokens, private conversations or complete comic episodes.
