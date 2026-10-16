@@ -38,10 +38,15 @@ onmessage=async({data:m})=>{if(busy){m.bitmap?.close();postMessage({id:m.id,erro
   }catch(e){if(mode==='webgpu')throw e;await fallback(e);}
   if(debugEnabled)startupDebug={startupMs:performance.now()-startupAt,runtime:runtimeDebug()};postMessage({id:m.id,result:status()});
  }else if(m.type==='detect'){
-  const preprocessAt=performance.now();let ctx;try{if(!session)throw Error('文字検出モデルが未起動です。');const c=inputCanvas||(inputCanvas=new OffscreenCanvas(640,640));ctx=inputContext||(inputContext=c.getContext('2d',{willReadFrequently:true}));if(!ctx)throw Error('画像処理用Canvasを作成できません。');ctx.clearRect(0,0,640,640);ctx.drawImage(m.bitmap,0,0,640,640);}finally{m.bitmap?.close();}
-  const rgba=ctx.getImageData(0,0,640,640).data,values=MangaPixels.fill(rgba,inputValues||(inputValues=new Float32Array(3*640*640))),start=performance.now();let out;
+  const preprocessAt=performance.now();const prep={};let ctx,mark=preprocessAt;
+  const checkpoint=key=>{if(debugEnabled){const now=performance.now();prep[key]=now-mark;mark=now;}};
+  try{if(!session)throw Error('文字検出モデルが未起動です。');const c=inputCanvas||(inputCanvas=new OffscreenCanvas(640,640));ctx=inputContext||(inputContext=c.getContext('2d',{willReadFrequently:true}));if(!ctx)throw Error('画像処理用Canvasを作成できません。');checkpoint('inputCanvasSetupMs');ctx.clearRect(0,0,640,640);ctx.drawImage(m.bitmap,0,0,640,640);checkpoint('inputDrawMs');}finally{m.bitmap?.close();}
+  checkpoint('inputBitmapCloseMs');
+  const rgba=ctx.getImageData(0,0,640,640).data;checkpoint('inputReadbackMs');
+  const values=MangaPixels.fill(rgba,inputValues||(inputValues=new Float32Array(3*640*640)));checkpoint('inputNormalizeMs');
+  const start=performance.now();let out;
   try{out=await run(values);}catch(e){if(mode!=='auto'||backend!=='webgpu')throw e;await fallback(e);out=await run(values);}
   lastInferenceMs=performance.now()-start;const postprocessAt=performance.now();
-  try{const decoded=MangaPostprocess.select(out['/postprocessor/Sigmoid_output_0'].data,out['/postprocessor/Concat_output_0'].data,m.width,m.height),detections=MangaCollage.detections(decoded.labels,decoded.boxes,decoded.scores,m.width,m.height);postMessage({id:m.id,result:{...status(),detections,...(debugEnabled?{debug:{preprocessMs:start-preprocessAt,inferenceMs:lastInferenceMs,postprocessMs:performance.now()-postprocessAt}}:{})}});}finally{for(const t of Object.values(out))t.dispose?.();}
+  try{const decoded=MangaPostprocess.select(out['/postprocessor/Sigmoid_output_0'].data,out['/postprocessor/Concat_output_0'].data,m.width,m.height),detections=MangaCollage.detections(decoded.labels,decoded.boxes,decoded.scores,m.width,m.height);postMessage({id:m.id,result:{...status(),detections,...(debugEnabled?{debug:{...prep,preprocessMs:start-preprocessAt,inferenceMs:lastInferenceMs,postprocessMs:performance.now()-postprocessAt}}:{})}});}finally{for(const t of Object.values(out))t.dispose?.();}
  }else throw Error('不明な検出操作です。');
 }catch(e){postMessage({id:m.id,error:e.message});}finally{busy=false;}};

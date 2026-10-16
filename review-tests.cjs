@@ -9,7 +9,7 @@ const vm = require('node:vm');
   assert.throws(() => URL.createObjectURL(transported.records[0].cropBlob), TypeError);
   let settingsReads=0,parallelSetting=4;let info = {ok:true}, reads=0, renders=0, failReady=false;
   const cache=new Map(),removed=[];
-  const imageDraws=[];let atlasOversize=false;const canvas=()=>{let draws=0;return ({getContext:()=>({fillRect(){},fillText(){draws++;},drawImage(...args){imageDraws.push(args);},getImageData(){return {data:[255,255,255,255]};}}),toBlob:fn=>fn(new Blob([atlasOversize&&draws>2?new Uint8Array(20*1024*1024+1):'atlas'],{type:'image/png'}))});};
+  const imageDraws=[];let atlasOversize=false;const canvas=()=>{let draws=0;return ({getContext:()=>({fillRect(){},clearRect(){},fillText(){draws++;},drawImage(...args){imageDraws.push(args);},getImageData(){return {data:[255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255]};}}),toBlob:fn=>fn(new Blob([atlasOversize&&draws>2?new Uint8Array(20*1024*1024+1):'atlas'],{type:'image/png'}))});};
   const context = vm.createContext({
     document:{querySelector:element,createElement:canvas}, Blob, URL, console, performance,
     EpisodeCache:{...require('./episode-cache.js'),get:async()=>null,put:async()=>true,clear:async()=>{}},MangaDebug:require('./debug-core.js'),MangaPerformance:require('./performance-core.js'),crypto:{randomUUID:()=> 'revision'}, MangaCollage:require('./collage-core.js'),
@@ -22,11 +22,12 @@ const vm = require('node:vm');
     MangaCore:{prompt:()=> 'translation prompt'},
     fetch:async()=>({blob:async()=>new Blob(['atlas'],{type:'image/png'})})
   });
+  vm.runInContext(fs.readFileSync(__dirname+'/color-core.js','utf8'),context);
+  vm.runInContext(fs.readFileSync(__dirname+'/region-image.js','utf8'),context);
   vm.runInContext(fs.readFileSync(__dirname+'/review.js','utf8'),context);
   await new Promise(resolve=>setImmediate(resolve));
   context.checkRecords = chapter => {
-    renders++; assert.ok(chapter.records[0].cropBlob instanceof Blob);
-    const url = URL.createObjectURL(chapter.records[0].cropBlob); URL.revokeObjectURL(url);
+    renders++; if(chapter.records[0].cropBlob){assert.ok(chapter.records[0].cropBlob instanceof Blob);const url=URL.createObjectURL(chapter.records[0].cropBlob);URL.revokeObjectURL(url);}else assert.ok(chapter.records[0].box);
   };
   vm.runInContext('renderRecords = () => checkRecords(chapter)',context);
   // Reopening a completed chapter must preserve Blob objects from IndexedDB.
@@ -39,7 +40,7 @@ const vm = require('node:vm');
   context.windowForTest={width:690,height:1800};
   const sourceReadsBefore=reads;
   await vm.runInContext('recrop({box:{x:10,y:205,width:20,height:30}},windowForTest,200)',context);
-  assert.equal(reads,sourceReadsBefore);assert.equal(imageDraws.at(-1)[0],context.windowForTest);assert.deepEqual(imageDraws.at(-1).slice(1),[10,5,20,30,0,0,20,30]);
+  assert.equal(reads,sourceReadsBefore);const windowDraw=imageDraws.find(args=>args[0]===context.windowForTest);assert.ok(windowDraw);assert.deepEqual(windowDraw.slice(1),[10,5,20,30,0,0,20,30]);
   let fallbacks=0;context.cropFallback=async()=>{fallbacks++;return canvas();};
   vm.runInContext('savedCanvasFor=canvasFor;canvasFor=cropFallback',context);
   try{await vm.runInContext('recrop({box:{x:10,y:190,width:20,height:30}},windowForTest,200)',context);await vm.runInContext('recrop({box:{x:10,y:1590,width:20,height:10}})',context);}finally{vm.runInContext('canvasFor=savedCanvasFor',context);}

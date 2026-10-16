@@ -1,4 +1,4 @@
-importScripts('core.js','text-core.js','collage-core.js','batch-store.js');
+importScripts('core.js','text-core.js','collage-core.js','batch-store.js','performance-core.js','region-image.js');
 const reviewOrigin=chrome.runtime.getURL('');
 function internal(s){return s.url?.startsWith(reviewOrigin);}
 async function state(){return chrome.storage.session.get(['job','collection','chatAccess','autoState','aiTabs','reviewTab']);}
@@ -117,11 +117,11 @@ async function retryImage(root,records){
  const crops=new Map((chapter?.records||[]).map(r=>[r.id,r]));
  let chosen=records.slice(0,12);
  while(chosen.length){
-  const selected=chosen.map(r=>{const crop=crops.get(r.id);if(!crop?.cropBlob)throw Error('再依頼用の切り抜き画像がありません。確認画面でこの話を準備し直してください。');return {...crop,enabled:true};});
+  const selected=chosen.map(r=>{const crop=crops.get(r.id);if(!crop?.box)throw Error('再依頼用の領域がありません。確認画面でこの話を準備し直してください。');return {...crop,enabled:true};});
   const page=MangaCollage.pages(selected)[0];chosen=chosen.slice(0,page.entries.length);
   const canvas=new OffscreenCanvas(page.width,page.height),ctx=canvas.getContext('2d');
   try{ctx.fillStyle='#e5e7eb';ctx.fillRect(0,0,page.width,page.height);ctx.font='bold 22px sans-serif';
-   for(const e of page.entries){const im=await createImageBitmap(e.record.cropBlob);try{ctx.fillStyle='#fff';ctx.fillRect(e.x-4,e.y-34,e.cellWidth-16,e.height+42);ctx.fillStyle='#111';ctx.fillText('ID '+e.id,e.x+4,e.y-9);ctx.drawImage(im,e.x,e.y,e.width,e.height);}finally{im.close();}}
+   for(const e of page.entries){ctx.fillStyle='#fff';ctx.fillRect(e.x-4,e.y-34,e.cellWidth-16,e.height+42);ctx.fillStyle='#111';ctx.fillText('ID '+e.id,e.x+4,e.y-9);await MangaRegionImage.draw(ctx,e.record,chapter.images,root.batchId,e);}
    const blob=await canvas.convertToBlob({type:'image/png'});if(blob.size<=20*1024*1024)return {blob,records:chosen};
   }finally{canvas.width=1;canvas.height=1;}
   if(chosen.length===1)throw Error('再依頼画像が20MBを超えています。');chosen=chosen.slice(0,Math.ceil(chosen.length/2));

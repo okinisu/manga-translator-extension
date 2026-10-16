@@ -120,3 +120,7 @@ if (Test-Path -LiteralPath $bridge -PathType Leaf) {
 Replace the `cd` or `$bridge` path with your actual clone/extraction folder, including its actual name (for example, `manga-translator-extension-main`). Startup automatically prints `Connection key: ...`; paste that key into the extension's Pi connection settings. This is separate from the provider's login code or API key. Keep the bridge terminal open during translation.
 
 [Complete Pi installation, login and connection-key guide](PI.md#english-setup)
+
+### Editing debug tools
+
+“プレビュー・位置修正（デバッグ用）” in advanced settings defaults to OFF. Normal translation builds images directly from source images and coordinates without intermediate crop PNGs. Enable it for region previews, selection, position editing, and adding missed regions. This setting is independent of timing diagnostics.

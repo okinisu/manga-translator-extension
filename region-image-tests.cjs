@@ -1,0 +1,20 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
+const base=__dirname+'/';
+(async()=>{
+ const api=require(base+'region-image.js');let closed=0,loads=0,draws=[];
+ global.createImageBitmap=async blob=>({blob,close(){closed++;}});global.BatchStore={get:async key=>{loads++;return {blob:new Blob([key])};}};
+ const ctx={fillRect(){},drawImage(...args){draws.push(args.slice(1));}};
+ const images=[{index:0,top:0,height:100},{index:1,top:100,height:100}];
+ await api.draw(ctx,{box:{x:5,y:80,width:20,height:40}},images,'batch',{x:10,y:20,width:20,height:40});
+ assert.deepEqual(draws,[[5,80,20,20,10,20,20,20],[5,0,20,20,10,40,20,20]]);assert.equal(closed,2);assert.equal(loads,2);
+ draws=[];await api.draw(ctx,{cropBlob:new Blob(['old']),box:{}},images,'batch',{x:1,y:2,width:3,height:4});assert.deepEqual(draws,[[1,2,3,4]]);assert.equal(loads,2);
+ await assert.rejects(api.draw(ctx,{box:{x:0,y:190,width:10,height:30}},images,'batch',{x:0,y:0,width:10,height:30}),/不足/);
+ let encodes=0,message;const workerCtx=vm.createContext({MangaColors:{colors:()=>({background:"#ffffff",foreground:"#111111"})},importScripts(){},MangaPerformance:{mapLimit:async(a,n,f)=>Promise.all(a.map(f))},OffscreenCanvas:class{getContext(){return {fillRect(){},drawImage(){},getImageData(){return {data:[255,255,255,255]};}}}async convertToBlob(){encodes++;return new Blob(['png']);}},postMessage(m){message=m;}});
+ vm.runInContext(fs.readFileSync(base+'crop-worker.js','utf8'),workerCtx);
+ const request=encode=>({data:{id:1,bitmap:{width:50,height:50,close(){}},records:[{box:{x:0,y:0,width:20,height:20}}],windowY:0,encode}});
+ await workerCtx.onmessage(request(false));assert.equal(encodes,0);assert.equal(message.records[0].cropBlob,undefined);assert.equal(message.records[0].background,'#ffffff');
+ await workerCtx.onmessage(request(true));assert.equal(encodes,1);assert.ok(message.records[0].cropBlob instanceof Blob);
+ const cache=require(base+'episode-cache.js'),input={url:'https://comic.naver.com/webtoon/detail?titleId=1&no=1',urls:['source']},part={y:0,height:50,ownTop:0,ownBottom:50};
+ assert.ok(cache.validWindow({cacheKey:cache.windowKey(input,part,50),detectionBackend:'webgpu',detectionGPU:'test',records:[{box:{x:0,y:0,width:20,height:20}}]},input,part,50));
+ console.log('PASS: direct source drawing across image boundaries, legacy PNG compatibility, missing source rejection, PNG off/on, background color preservation, metadata-only cache');
+})().catch(e=>{console.error(e);process.exitCode=1;});

@@ -110,3 +110,7 @@ action('#piConnect',async()=>{
  $('#status').textContent='Pi接続OK / 画像対応モデル '+result.models.length+' 件を取得しました。';
  }finally{$('#piConnect').disabled=false;}
 });
+
+$('#editorDebug').disabled=true;
+(async()=>{try{const saved=await loadSettings({editorDebug:false});$('#editorDebug').checked=!!saved.editorDebug;}catch(e){$('#status').textContent=e.message;}finally{$('#editorDebug').disabled=false;}})();
+$('#editorDebug').onchange=async()=>{try{await saveSettings({editorDebug:$('#editorDebug').checked});$('#status').textContent='編集用デバッグ設定を保存しました。';}catch(e){$('#status').textContent=e.message;}};

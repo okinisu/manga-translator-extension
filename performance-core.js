@@ -18,7 +18,7 @@
  // disables the pool; callers still own their source canvas and can recrop.
  class CropPool {
   constructor(limit=2){this.limit=limit;this.slots=[];this.next=0;this.failed=false;this.closed=false;}
-  async run(canvas,records,windowY){
+  async run(canvas,records,windowY,encode=true){
    if(!records.length)return [];
    if(this.closed||this.failed||typeof Worker!=='function'||typeof createImageBitmap!=='function')return null;
    let slot=this.slots.find(s=>!s.busy);
@@ -34,7 +34,7 @@
     const id=++this.next;
     return await new Promise(resolve=>{
      const timer=setTimeout(()=>this.disable(),60000);slot.request={id,resolve,timer};
-     try{slot.worker.postMessage({id,bitmap,records,windowY},[bitmap]);bitmap=null;}catch{bitmap?.close();bitmap=null;this.disable();}
+     try{slot.worker.postMessage({id,bitmap,records,windowY,encode},[bitmap]);bitmap=null;}catch{bitmap?.close();bitmap=null;this.disable();}
     });
    }catch{this.disable();return null;}finally{bitmap?.close();slot.busy=false;}
   }

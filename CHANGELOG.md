@@ -1,3 +1,11 @@
+## Unreleased
+
+- Make region previews and position editing an opt-in debug option; skip intermediate crop PNGs during normal translation.
+- Draw translation and missing-ID retry images directly from original sources, retaining legacy crop cache support.
+- Resize inference bitmaps to 640×640 before worker transfer; preserve original coordinate dimensions.
+- Show a clearly labeled concurrency-normalized inference estimate while retaining measured response times, and split preprocessing diagnostics.
+- Reuse a small Canvas to read the four background samples together. The slower full-window sampling experiment was reverted.
+
 # Changelog
 
 ## 1.0.2 — 2026-10-15
