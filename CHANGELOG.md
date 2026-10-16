@@ -1,4 +1,4 @@
-## Unreleased
+## 1.0.3 — 2026-10-16
 
 - Make region previews and position editing an opt-in debug option; skip intermediate crop PNGs during normal translation.
 - Draw translation and missing-ID retry images directly from original sources, retaining legacy crop cache support.
