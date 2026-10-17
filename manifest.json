@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "漫画翻訳 / Manga Translator",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "TFLite / LiteRT.jsで漫画の文字領域を検出し、選択したAIで翻訳するChrome拡張機能。",
   "permissions": [
     "activeTab",

@@ -522,5 +522,28 @@
       "sameClassAndCount": true,
       "integratedOpaqueFlagVerified": true
     }
+  },
+  "gpuTopK": {
+    "validated": true,
+    "runtime": "LiteRT.js 2.5.3",
+    "vendors": [
+      "nvidia"
+    ],
+    "architectures": [
+      "lovelace"
+    ],
+    "mode": "fp16-full (native only)",
+    "inputCandidates": 8400,
+    "selectedCandidates": 300,
+    "method": "two-level half-float histogram threshold plus exact stable rank",
+    "signatureHashes": {
+      "first": 991858326,
+      "next": 841281551,
+      "copy-half": 351783886,
+      "copy-int": 3238503166
+    },
+    "sameSourceOutputsOnRealWindows": 32,
+    "maxRawOutputDifference": 0,
+    "otherModesUnchanged": true
   }
 }

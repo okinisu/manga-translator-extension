@@ -26,3 +26,7 @@ See [MODEL.md](MODEL.md), [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), [PRI
 ## Source checkout
 
 The three TFLite model files use Git LFS. Install Git LFS and run `git lfs pull` in the repository root before loading or packaging a source checkout. Release ZIPs contain the actual model files.
+
+## Local 2.0.1 candidate
+
+NVIDIA Lovelace native full-FP16 query selection uses exact stable GPU TopK. Two interleaved sessions show a 3.4% pooled median response improvement and 1.2% mean improvement; 32 real windows match 2.0.0 raw scores/boxes exactly. Chapter-level speedup is unmeasured. See TOPK-RESULTS.json.

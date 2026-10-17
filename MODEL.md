@@ -25,3 +25,7 @@ Full-FP16 option additionally patches matched packed-half convolution shaders to
 ## Experimental GPU matrix kernels (1.0.3.12)
 
 Disk weights and graph files are unchanged. The previous 22 per-row/per-channel INT8 convolutions remain intact. A separate block-tensor.js handles 59 additional convolutions using 64-element scales, signed INT8 multiplication, INT32 accumulation and FP32 summation across blocks. Grouped packed layouts and residual-add-plus-ReLU are supported. Other operations retain LiteRT behavior. See TENSOR-RESULTS.json for model agreement and timing evidence.
+
+## 2.0.1 candidate: stable GPU TopK
+
+The model files and weights are unchanged. NVIDIA Lovelace native full-FP16 query selection is accelerated only for the exact known LiteRT.js 2.5.3 generated shader signatures and 8400-value/300-result layout. Two histogram passes find an exact FP16 score cutoff, followed by stable ranking (lower index wins equal scores) and packed output. The input is already packed FP16; this adds no quantization. One 1212-byte scratch buffer and custom bind groups are reused. Unknown signatures, layouts and dynamic offsets retain original dispatches. Other devices and precision modes retain their existing paths. Numerical and timing limits are recorded in TOPK-RESULTS.json.

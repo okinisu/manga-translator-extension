@@ -1,6 +1,6 @@
 # Validation
 
-Run `python3 scripts/test_extension.py` in the repository root. This runs the 35 regression suites, JavaScript syntax checks and bundled model hash checks. Build the release ZIP with `python3 scripts/package_extension.py --output dist`.
+Run `python3 scripts/test_extension.py` in the repository root. This runs the 36 regression suites, JavaScript syntax checks and bundled model hash checks. Build the release ZIP with `python3 scripts/package_extension.py --output dist`.
 
 The historical GPU report names below refer to local development evidence; the raw fixtures, conversion environment and reports are not included in this repository. Summary results and measurement limits are recorded in TENSOR-RESULTS.json and TFLITE-OPTIMIZATION.json. Live AI DOM/account interactions require manual verification.
 
@@ -53,3 +53,7 @@ Final production-source A/B: four images, 48 alternating timings/version/session
 ## 1.0.3.15 native FP16
 
 Native FP16 mode only: previous/candidate are fp16-full, batch one, 640×640, three warmups, four images, two independent 48-run interleaved sessions. Both have zero custom INT8/Tensor Core guards and no fallback reason. 32-fixture validation used the same final worker source and unchanged model/patcher. Count/classes preserved; maximum box-edge difference versus ONNX FP32 is 0.7127px. Unit tests cover native FP16 activation without matrix support and no INT8-kernel installation, plus all prior FP32/default/vendor guards. 35 suites passed.
+
+## 2.0.1 candidate
+
+36 suites pass. topk-gpu-tests.cjs checks exact shader signatures, shape/sequence/dynamic-offset fallback, repeated buffer/group reuse, cleanup and precision/vendor gating. GPU edge-case tests cover random/equal/negative scores, signed zero, descending/repeated values, FP16 extremes and ties at the 300th boundary. Raw model outputs match 2.0.0 on 32 windows from eight panels of chapter 154. Two final independent interleaved sessions use 48 timings per mode, four representative windows, batch/concurrency one and three warmups. See TOPK-RESULTS.json. Preliminary invalid comparisons are excluded.

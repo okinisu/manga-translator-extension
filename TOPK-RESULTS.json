@@ -1,0 +1,127 @@
+{
+  "version": "2.0.1",
+  "status": "validated optimization",
+  "baselineVersion": "2.0.0",
+  "hardware": {
+    "modelPrecision": "FP16（全体・速度優先）",
+    "isFallbackAdapter": false,
+    "shaderF16": true,
+    "adapterShaderF16": true,
+    "vendor": "nvidia",
+    "architecture": "lovelace",
+    "device": "",
+    "description": "",
+    "fullyAccelerated": false
+  },
+  "runtime": "LiteRT.js 2.5.3 / Chrome beta / Linux Vulkan",
+  "mode": "native full FP16",
+  "batch": 1,
+  "workerConcurrency": 1,
+  "warmupsPerMode": 3,
+  "timingMetric": "worker inference response including GPU preprocessing, CPU fallback, output readback and JS selection; excludes source image download and crop",
+  "sessions": [
+    {
+      "session": 1,
+      "startupOrder": "baseline,candidate",
+      "runsPerMode": 48,
+      "baselineMedianMs": 31.59750000014901,
+      "candidateMedianMs": 30.047500000102445
+    },
+    {
+      "session": 2,
+      "startupOrder": "candidate,baseline",
+      "runsPerMode": 48,
+      "baselineMedianMs": 31.0625,
+      "candidateMedianMs": 30.955000000074506
+    }
+  ],
+  "combined": {
+    "runsPerMode": 96,
+    "baselineMedianMs": 31.392500000074506,
+    "candidateMedianMs": 30.31500000017695,
+    "medianReductionPercent": 3.4323484905470965,
+    "baselineMeanMs": 31.572291666675785,
+    "candidateMeanMs": 31.198437500012613,
+    "meanReductionPercent": 1.1841210977338428
+  },
+  "accuracy": {
+    "realWindows": 32,
+    "panels": 8,
+    "chapter": 154,
+    "sameRawScoresAndBoxes": true,
+    "maxRawOutputDifference": 0,
+    "sameSelectedDetections": true,
+    "reference": "unchanged 2.0.0 native full FP16; not a new ONNX/human-ground-truth comparison"
+  },
+  "gpuEdgeCases": {
+    "rows": [
+      {
+        "name": "random",
+        "mismatches": 0
+      },
+      {
+        "name": "equal",
+        "mismatches": 0
+      },
+      {
+        "name": "negative",
+        "mismatches": 0
+      },
+      {
+        "name": "signed-zero",
+        "mismatches": 0
+      },
+      {
+        "name": "descending",
+        "mismatches": 0
+      },
+      {
+        "name": "repeated",
+        "mismatches": 0
+      },
+      {
+        "name": "extremes",
+        "mismatches": 0
+      },
+      {
+        "name": "boundary-ties",
+        "mismatches": 0
+      }
+    ],
+    "errors": []
+  },
+  "addedDispatchesBeyondReplacedInitialTopK": 3,
+  "scratchBytes": 1212,
+  "notes": [
+    "Measured gains vary across sessions; chapter-level speedup is unmeasured.",
+    "Auto/FP32, AMD partial/full FP16 and experimental matrix modes retain their existing paths.",
+    "Unknown shader signatures, shapes or sequences fall back to original dispatches.",
+    "Preliminary runs ab-1/ab-2 used an incorrect variant switch and ab-3 fell back to FP32; excluded.",
+    "Raw output capture was corrected to identify tensors by length; final sessions compare scores and boxes separately."
+  ],
+  "originalTopKDispatches": 223,
+  "candidateTopKDispatches": 6,
+  "netDispatchesSaved": 217,
+  "eliminatedRedundantDispatches": 220,
+  "amdSmoke": {
+    "gpu": {
+      "modelPrecision": "FP16（全体・速度優先）",
+      "isFallbackAdapter": false,
+      "shaderF16": true,
+      "adapterShaderF16": true,
+      "vendor": "amd",
+      "architecture": "rdna-3",
+      "device": "",
+      "description": "",
+      "fullyAccelerated": false
+    },
+    "fallbackReason": "",
+    "newTopKGuardActive": false,
+    "gpuValidationErrors": 0,
+    "scope": "startup and 8 synthetic inferences; not an AMD performance comparison"
+  },
+  "sourceHashes": {
+    "detector-worker.js": "5fb334a159f77c673e858c9afb62b5f732ad4069dc1293c5021dd33a51c739ad",
+    "topk-gpu-core.js": "bf2f27ae33e8dca110f20af54965a1c9e3618fb5c812c2ed869d4f3c7d735f88"
+  }
+}

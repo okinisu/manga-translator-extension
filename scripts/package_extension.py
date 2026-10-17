@@ -9,8 +9,8 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 RUNTIME = '''manifest.json popup.html popup.css popup.js review.html review.js ui.css
 pi-client.js ui-i18n.js core.js text-core.js collage-core.js batch-store.js background.js
-comic.js chat.js automation.js gemini-dom.js detector.js detector-worker.js litert-gpu-core.js tensor-convolution.js block-tensor.js gpu-input-core.js nhwc-pixel-core.js
-TFLITE-OPTIMIZATION.json TENSOR-RESULTS.json benchmark.html benchmark.js postprocess-core.js performance-core.js crop-worker.js region-image.js color-core.js episode-cache.js debug-core.js debug-ui.js debug.css
+comic.js chat.js automation.js gemini-dom.js detector.js detector-worker.js litert-gpu-core.js topk-gpu-core.js tensor-convolution.js block-tensor.js gpu-input-core.js nhwc-pixel-core.js
+TFLITE-OPTIMIZATION.json TENSOR-RESULTS.json TOPK-RESULTS.json benchmark.html benchmark.js postprocess-core.js performance-core.js crop-worker.js region-image.js color-core.js episode-cache.js debug-core.js debug-ui.js debug.css
 vendor/MODEL-LICENSE vendor/MODEL-NOTICES.txt PRIVACY.md THIRD_PARTY_NOTICES.md README.md README.en.md MODEL.md CHANGELOG.md TESTING.md PI.md scripts/pi-bridge.mjs'''.split()
 
 

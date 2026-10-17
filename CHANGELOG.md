@@ -1,3 +1,10 @@
+# 2.0.1 — NVIDIA FP16 TopK optimization
+
+- NVIDIA Lovelace native full FP16: replace the fixed 8400→300 packed-half query selection with an exact histogram threshold and stable rank; reduce this TopK sequence from 223 GPU dispatches to 6 (217 fewer).
+- Exact generated shader signatures, buffer shape and execution sequence gates preserve unknown paths. Persistent scratch storage and bind groups are reused.
+- 32 real windows match 2.0.0 raw scores/boxes and selected detections exactly; eight standalone GPU edge cases pass.
+- Two independent 48-run/mode interleaved sessions: pooled response median 31.39→30.32ms (3.4%), mean improves 1.2%. Chapter-level speedup is unmeasured. See TOPK-RESULTS.json.
+
 # 2.0.0 — TensorFlow Lite版
 
 - 文字領域検出をONNX RuntimeからTensorFlow Lite / LiteRT.jsへ移行した版を2.0とします。
