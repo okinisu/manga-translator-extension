@@ -1,24 +1,27 @@
-# Bundled detector
+# TFLite models
 
-The upstream model is [ogkalu/comic-text-and-bubble-detector](https://huggingface.co/ogkalu/comic-text-and-bubble-detector/tree/16e8a62), based on RT-DETR-v2 r50vd, distributed with an Apache-2.0 license declaration.
+Source: [ogkalu/comic-text-and-bubble-detector](https://huggingface.co/ogkalu/comic-text-and-bubble-detector), RT-DETR-v2 R50-vd derivative. Existing trained weights are retained; no retraining.
 
-- Fixed input: 1×3×640×640, FP32 image input.
-- 300 prediction candidates with bubble / text_bubble / text_free classes.
-- The extension selects text_bubble and text_free; default confidence threshold: 0.48.
-- Detects geometry, not recognized text. OCR and translation are performed by the selected remote AI.
+- vendor/litert/detector_optimized.tflite: complete FP32 model, used for CPU, explicit FP32 and fallback. Input float32 NHWC [1,640,640,3], RGB /255; outputs [1,300,3] class scores and [1,300,4] normalized xyxy boxes.
+- vendor/litert/detector_backbone.tflite: feature extraction ending at tf.concat_4/concat, 232 operators, same image input, float32 interface [1,8400,256]. GPU runtime precision is FP16 on validated AMD RDNA3.
+- vendor/litert/detector_head.tflite: remaining 2314 operators, input [1,8400,256], original scores/boxes outputs. Runtime precision FP32.
 
-## Included derivatives
+The full graph uses compact INT32 row Gather, rank <=4, compatible SUB/slice versions, 87 explicitly aligned broadcast inputs and 90 composed transpose pairs. Split and full CPU FP32 raw outputs match exactly on four fixture tensors. GPU FP16 execution changes numeric values; it is not INT8 quantization or exact FP32 equivalence.
 
-| File | Precision / use |
-|---|---|
-| vendor/detector_fp32.onnx | FP32, WebGPU fallback |
-| vendor/detector_gpu_fp16.onnx | Partial FP16, WebGPU with shader-f16 |
-| vendor/detector_int8_static.onnx | Original dynamic INT8 quantization retained, integer shape folding, CPU/WASM |
+Runtime @litertjs/core 2.5.3 is bundled locally. litert-gpu-core.js applies the missing f16 enable directive and explicit f32 casts of At_buffer/Bt_buffer coefficients in mixed FP16/FP32 Winograd transforms. Patches are feature-gated, idempotent and accompanied by shader compilation/device error checks. Unsupported partial execution retries full FP32. GPU buffer type 26 is reused where advertised; intermediate tensors are directly passed between compiled models.
 
-The filename int8_static describes fixed model shapes, not static activation quantization. GPU derivatives use fixed shapes, raw scores/boxes and JavaScript TopK/coordinate postprocessing. Partial FP16 includes backbone/encoder and decoder float islands; final decoder normalization, remaining unsupported operations, postprocessing and external inputs/outputs remain FP32.
+Automatic partial FP16 is gated to amd/rdna-3 with shader-f16. NVIDIA partial FP16 was rejected due to an integrated class mismatch; automatic mode remains full FP32. TFLITE-OPTIMIZATION.json binds all three model hashes and records validation scope. Development conversion scripts/evidence are excluded from installable ZIPs; source images are never bundled.
 
-The CPU and GPU configuration JSON files record exact model SHA-256 hashes, transformations and validation provenance. These are existing model-validation records, not claims of new measurements for release 1.0.0. Retain model/runtime licenses and notices when copying the weights.
+Optional `fp16-full` executes the existing optimized whole graph in FP16 on validated AMD RDNA3 or NVIDIA Lovelace. No additional weights are shipped. Automatic mode remains split FP16/FP32. A failed full-FP16 startup or run retries FP32. 32 integrated GPU fixtures matched ONNX FP32 classes/counts, maximum edge difference 2.6637px.
 
-Runtime: ONNX Runtime Web 1.30.0 for partial-FP16 WebGPU; 1.23.2 for FP32 WebGPU/CPU. Native Graph Capture auto applies only to AMD partial FP16; explicit on is experimental. GPU selection and feature availability are determined by the browser.
+Full-FP16 option additionally patches matched packed-half convolution shaders to f16 FMA accumulators; outputs retain FP32 conversion and existing packed storage. This changes arithmetic rounding, not model weights. Enabled only with fullFP16.halfConvolution.validated; unsupported shader patterns remain unchanged. Shader compilation/device validation guards and FP32 retry remain active.
 
-This repository does not include upstream training images or a reproducible model-training pipeline.
+1.0.3.7 enables the same half-convolution shader transformation in the automatic/explicit partial-FP16 backbone, gated independently by partialFP16.halfConvolution.validated. The head remains FP32. GPU evidence: 32 images, equal classes/counts, maximum edge error 0.751526px and score error 0.007118. Model weights and tensor interfaces are unchanged.
+
+1.0.3.8 adds a separate FP32 GPU RGB normalization pass into the existing packed-input GPUBuffer. It requires the caller to mark a known-opaque 640×640 bitmap and a validated adapter. Chapter windows are composited over white before resizing. Unknown-alpha inputs remain CPU-normalized because transparent unpremultiplication can differ by one byte between Canvas and GPU copies. Opaque all-256-level probes matched CPU float32 values exactly. No resize algorithm or model weights changed.
+
+1.0.3.9 enables opt-in full FP16 on NVIDIA Lovelace after32-image GPU validation: counts/classes match ONNX FP32, maximum integrated edge error2.228333px, score difference0.038263. Automatic NVIDIA precision remains FP32; partial NVIDIA precision remains disabled. No weights or shader algorithms changed in this release.
+
+## Experimental GPU matrix kernels (1.0.3.12)
+
+Disk weights and graph files are unchanged. The previous 22 per-row/per-channel INT8 convolutions remain intact. A separate block-tensor.js handles 59 additional convolutions using 64-element scales, signed INT8 multiplication, INT32 accumulation and FP32 summation across blocks. Grouped packed layouts and residual-add-plus-ReLU are supported. Other operations retain LiteRT behavior. See TENSOR-RESULTS.json for model agreement and timing evidence.

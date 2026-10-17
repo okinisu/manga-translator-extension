@@ -1,0 +1,2 @@
+const assert=require('node:assert/strict'),pixels=require('./nhwc-pixel-core.js');
+const rgba=new Uint8Array(640*640*4),out=new Float32Array(640*640*3);rgba.set([255,128,0,17,0,64,255,255]);assert.equal(pixels.fill(rgba,out),out);assert.deepEqual(Array.from(out.slice(0,6)),[1,Math.fround(128/255),0,0,Math.fround(64/255),1]);assert.equal(out.at(-1),0);assert.throws(()=>pixels.fill(new Uint8Array(4),out));assert.throws(()=>pixels.fill(rgba,new Float32Array(3)));console.log('PASS: NHWC RGB normalization, alpha ignored, reusable destination and invalid-size guard');

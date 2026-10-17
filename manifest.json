@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "漫画翻訳 / Manga Translator",
-  "version": "1.0.3",
-  "description": "漫画の文字領域を検出し、ChatGPT・Gemini・Pi経由で自動翻訳して原文を覆います。",
+  "version": "2.0.0",
+  "description": "TFLite / LiteRT.jsで漫画の文字領域を検出し、選択したAIで翻訳するChrome拡張機能。",
   "permissions": [
     "activeTab",
     "storage",

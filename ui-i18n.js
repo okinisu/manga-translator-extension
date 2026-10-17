@@ -1,6 +1,12 @@
 // Localize extension-owned UI only. Prompts, translations and page content are excluded.
 (() => {
  const en={
+ 'FP16 Tensor Core（実験・高速化未確認）':'FP16 Tensor Core (experimental, speedup unproven)',
+ '部分INT8 Tensor Core（実験・速度優先）':'Partial INT8 Tensor Core (experimental, faster)',
+ '全体FP16（AMD／NVIDIA・速度優先）':'Full FP16 (AMD/NVIDIA, faster)',
+ '自動（AMD RDNA3は部分FP16）':'Auto (partial FP16 on AMD RDNA3)',
+ '部分FP16（AMD RDNA3向け）':'Partial FP16 (AMD RDNA3)',
+ 'FP32（精度優先）':'FP32 (prefer precision)',
  '翻訳メモ・カスタム指示':'Translation memory / custom instructions',
  '毎回の翻訳に追加する指示':'Instructions added to each translation',
  '例：人名の表記を統一する。主人公の一人称は「俺」。':'Example: Keep names consistent. Use casual speech for the protagonist.',

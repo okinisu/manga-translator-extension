@@ -1,0 +1,526 @@
+{
+  "sourceSha256": "6b3082442f8da757f379314633862b950fb67b39dbd0bfdbac520131d36d740c",
+  "sha256": "7ee29664d4f54d9d4990780ad8d673657ccfbb5eae6f4e368ee54e7cc540e50d",
+  "sourceBytes": 175010720,
+  "bytes": 168916372,
+  "operatorsBefore": 2650,
+  "operatorsAfter": 2546,
+  "int64TensorsConverted": 713,
+  "rowGatherRewrites": 74,
+  "customOperators": [],
+  "validated": true,
+  "rewrites": [
+    {
+      "op": 390,
+      "kind": "topk-row-gather"
+    },
+    {
+      "op": 399,
+      "kind": "topk-row-gather"
+    },
+    {
+      "op": 587,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 596,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 609,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 618,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 643,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 652,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 665,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 674,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 695,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 704,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 717,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 726,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 863,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 871,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 886,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 894,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 956,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 964,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 979,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 987,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1049,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1057,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1072,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1080,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1234,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1242,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1257,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1265,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1327,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1335,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1350,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1358,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1425,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1433,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1459,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1468,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1681,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1689,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1704,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1712,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1753,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1762,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1775,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1784,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1808,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1817,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1830,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1839,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1976,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1984,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 1999,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 2007,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 2069,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 2077,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 2092,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 2100,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 2162,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 2170,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 2185,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 2193,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 2347,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 2355,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 2370,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 2378,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 2440,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 2448,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 2463,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 2471,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 2533,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 2541,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 2556,
+      "kind": "sampling-row-gather"
+    },
+    {
+      "op": 2564,
+      "kind": "sampling-row-gather"
+    }
+  ],
+  "validationScope": "native TFLite CPU 2 threads, four existing real image tensors, baseline vs row-gather optimized",
+  "gpuRankLoweredTensors": 67,
+  "gpuVersionLowering": [
+    "SUB 4->2 (no INT64 remains)",
+    "STRIDED_SLICE 4->2 (no INT64 remains)"
+  ],
+  "additionalGatherFlattened": 0,
+  "gatherSafety": "Gather version 2 with batchDims=0; actual delegation is runtime-dependent",
+  "explicitBroadcastInputs": 87,
+  "composedTransposes": 90,
+  "gpuHardwareValidation": {
+    "version": "1.0.3.3",
+    "browser": "Chrome 157 Linux Vulkan",
+    "reference": "ONNX FP32",
+    "images": 32,
+    "sameClassAndCount": true,
+    "maxBoxEdgeErrorPx": 0.000244140625,
+    "maxScoreError": 1.9669532775878906e-06,
+    "rtx4060": {
+      "baselineHostMedianMs": 46.83,
+      "optimizedPackedMedianMs": 43.27
+    },
+    "radeon780M": {
+      "baselineHostMedianMs": 143.35,
+      "optimizedPackedMedianMs": 136.66,
+      "maxBoxEdgeErrorPx": 0.0001220703125
+    },
+    "timingScope": "12 interleaved measured samples per variant after warmup, single image/session; four variants loaded, serialized requests"
+  },
+  "partialFP16": {
+    "validated": true,
+    "vendors": [
+      "amd"
+    ],
+    "backbone": {
+      "file": "vendor/litert/detector_backbone.tflite",
+      "sha256": "20bb30f44d80cd42dc77c45f81f0f143e6c8d5bce686f446b3e14b81f91f9a65",
+      "bytes": 139867856
+    },
+    "head": {
+      "file": "vendor/litert/detector_head.tflite",
+      "sha256": "e38fd02b13be5ffd042250dd14f0f51579577472d80bad6bd72a26f2cfb906c7",
+      "bytes": 29012592
+    },
+    "cpuSplitValidation": "four input tensors, raw outputs exactly equal",
+    "gpuValidation": {
+      "images": 32,
+      "sameClassAndCount": true,
+      "amdMaxEdgeErrorPx": 0.55572509765625,
+      "amdMaxScoreError": 0.018275976181030273,
+      "nvidiaEnabled": false,
+      "nvidiaReason": "Integrated implementation showed class mismatch on sample 32; retain full FP32 on NVIDIA"
+    },
+    "architectures": [
+      "rdna-3"
+    ],
+    "performance": {
+      "gpu": "Radeon 780M",
+      "baselineFP32Ms": 134.2824999988079,
+      "partialFP16Ms": 110.62000000104308,
+      "samples": 12,
+      "scope": "same image, one session per variant, warmed, interleaved"
+    },
+    "halfConvolution": {
+      "validated": true,
+      "images": 32,
+      "reference": "ONNX FP32 WebGPU",
+      "sameClassAndCount": true,
+      "maxEdgeErrorPx": 0.75152587890625,
+      "maxScoreError": 0.007118284702301025,
+      "performance": {
+        "gpu": "Radeon 780M",
+        "baselinePartialFP16Ms": 110.84750000014901,
+        "halfConvolutionMs": 102.29000000096858,
+        "samples": 12,
+        "scope": "warmed interleaved single-image single-session inference"
+      },
+      "integratedValidation": {
+        "images": 32,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.75152587890625,
+        "maxScoreError": 0.007118284702301025,
+        "medianMs": 102.98499999940395
+      }
+    }
+  },
+  "fullFP16": {
+    "validated": true,
+    "vendors": [
+      "amd",
+      "nvidia"
+    ],
+    "architectures": [
+      "rdna-3",
+      "lovelace"
+    ],
+    "optInOnly": true,
+    "gpuValidation": {
+      "images": 32,
+      "sameClassAndCount": true,
+      "maxEdgeErrorPx": 2.6636962890625,
+      "maxScoreError": 0.029378652572631836
+    },
+    "performance": {
+      "gpu": "Radeon 780M",
+      "partialFP16Ms": 111.7050000000745,
+      "fullFP16Ms": 87.81750000081956,
+      "samples": 12,
+      "scope": "warmed interleaved same image single session per variant"
+    },
+    "halfConvolution": {
+      "validated": true,
+      "images": 32,
+      "reference": "ONNX FP32 WebGPU",
+      "sameClassAndCount": true,
+      "maxEdgeErrorPx": 2.63031005859375,
+      "maxScoreError": 0.03296089172363281,
+      "performance": {
+        "gpu": "Radeon 780M",
+        "baselineFullFP16Ms": 86.30250000022352,
+        "halfConvolutionMs": 75.62749999947846,
+        "samples": 12,
+        "scope": "warmed interleaved single-image single-session inference"
+      },
+      "integratedValidation": {
+        "images": 32,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 2.63031005859375,
+        "maxScoreError": 0.03296089172363281,
+        "medianMs": 74.17999999970198
+      }
+    },
+    "nvidiaValidation": {
+      "gpu": "RTX 4060 Laptop / lovelace",
+      "images": 32,
+      "reference": "ONNX FP32 WebGPU",
+      "sameClassAndCount": true,
+      "maxEdgeErrorPx": 2.22833251953125,
+      "maxScoreError": 0.03826254606246948,
+      "autoEnabled": false,
+      "performance": {
+        "fp32Ms": 42.560000002384186,
+        "fullFP16Ms": 36.48750000074506,
+        "samples": 12,
+        "scope": "warmed interleaved single-image single-session inference including GPU normalization"
+      },
+      "integratedValidation": {
+        "sessions": 2,
+        "imagesPerSession": 32,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 2.22833251953125,
+        "maxScoreError": 0.03826254606246948,
+        "medianMs": [
+          36.474999997764826,
+          36.190000001341105
+        ]
+      },
+      "initialValidation": {
+        "maxEdgeErrorPx": 0.7327880859375,
+        "maxScoreError": 0.0033374428749084473
+      }
+    },
+    "nativeCachedConvolution": {
+      "validated": true,
+      "vendors": [
+        "nvidia"
+      ],
+      "architectures": [
+        "lovelace"
+      ],
+      "mode": "fp16-full",
+      "sourceVersion": "1.0.3.15",
+      "images": 32,
+      "reference": "ONNX FP32 WebGPU",
+      "sameClassAndCount": true,
+      "maxEdgeErrorPx": 0.712646484375,
+      "maxScoreError": 0.009730935096740723,
+      "experimentalSubgroupMatrixRequired": false
+    }
+  },
+  "gpuInput": {
+    "validated": true,
+    "adapters": [
+      {
+        "vendor": "amd",
+        "architecture": "rdna-3"
+      },
+      {
+        "vendor": "nvidia",
+        "architecture": "lovelace"
+      }
+    ],
+    "requiresKnownOpaque": true,
+    "requiresShape": [
+      640,
+      640
+    ],
+    "input": "RGB NHWC FP32 / 255",
+    "unknownAlpha": "CPU canvas normalization retained",
+    "opaquePixelValidation": "all 256 levels, zero float32 difference",
+    "performance": {
+      "scope": "12 warmed interleaved samples, preprocessing plus inference",
+      "amdBaselineMs": 76.85999999940395,
+      "amdGPUInputMs": 74.69500000029802,
+      "nvidiaBaselineMs": 46.125000001862645,
+      "nvidiaGPUInputMs": 44.75999999977648
+    },
+    "gpuValidation": {
+      "imagesPerMode": 32,
+      "amdFullFP16MaxEdgePx": 2.63031005859375,
+      "amdPartialFP16MaxEdgePx": 0.75152587890625,
+      "nvidiaFP32MaxEdgePx": 0.000244140625,
+      "sameClassAndCount": true,
+      "integratedOpaqueFlagVerified": true
+    }
+  }
+}

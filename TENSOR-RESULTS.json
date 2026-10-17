@@ -1,0 +1,320 @@
+{
+  "version": "2.0.0",
+  "experimental": true,
+  "mode": "fp16-full",
+  "defaultChanged": false,
+  "hardware": "RTX 4060 Laptop / Linux Vulkan / Chrome beta 157.0.8103.6",
+  "change": "Enable existing FP16 workgroup weight cache, FP16 FMA accumulation and FP16 input temporaries for native full-FP16 mode on NVIDIA Lovelace. The tensor-int8 matrix path is unchanged.",
+  "tensorCoreRequired": false,
+  "officialReference": {
+    "url": "https://github.com/lyuwenyu/RT-DETR/tree/main/rtdetrv2_pytorch#model-zoo",
+    "inputSize": 640,
+    "batchSize": 1,
+    "precision": "FP16",
+    "runtime": "TensorRT >=8.5.1",
+    "gpu": "NVIDIA T4",
+    "fps": 108,
+    "directlyComparable": false
+  },
+  "benchmark": {
+    "metric": "Wall-clock inference response including CPU fallback, readback, JS selection and queued GPU normalization; excludes image download/crop",
+    "batchSize": 1,
+    "workerConcurrency": 1,
+    "warmups": 3,
+    "sessions": [
+      {
+        "images": 4,
+        "runsPerMode": 48,
+        "previousMs": 35.96749999374151,
+        "candidateMs": 29.622499994933605,
+        "reductionPercent": 17.640925835579235
+      },
+      {
+        "images": 4,
+        "runsPerMode": 48,
+        "previousMs": 36.189999990165234,
+        "candidateMs": 29.012500002980232,
+        "reductionPercent": 19.83282671769968
+      }
+    ],
+    "combined": {
+      "runsPerMode": 96,
+      "previousVersion": "1.0.3.14",
+      "previousMs": 36.02750000357628,
+      "candidateMs": 29.21000000089407,
+      "reductionPercent": 18.92304490182629
+    }
+  },
+  "accuracy": {
+    "images": 32,
+    "reference": "ONNX FP32 WebGPU",
+    "sameClassAndCount": true,
+    "maxEdgeErrorPx": 0.712646484375,
+    "maxScoreError": 0.009730935096740723,
+    "within3px": true,
+    "rows": [
+      {
+        "sample": "01",
+        "baselineCount": 1,
+        "candidateCount": 1,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.2400665283203125,
+        "maxScoreError": 0.0027576684951782227
+      },
+      {
+        "sample": "02",
+        "baselineCount": 3,
+        "candidateCount": 3,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.4193115234375,
+        "maxScoreError": 0.002355635166168213
+      },
+      {
+        "sample": "03",
+        "baselineCount": 1,
+        "candidateCount": 1,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.35821533203125,
+        "maxScoreError": 0.0038778185844421387
+      },
+      {
+        "sample": "04",
+        "baselineCount": 2,
+        "candidateCount": 2,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.5623779296875,
+        "maxScoreError": 0.0013281702995300293
+      },
+      {
+        "sample": "05",
+        "baselineCount": 2,
+        "candidateCount": 2,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.279144287109375,
+        "maxScoreError": 0.0004653334617614746
+      },
+      {
+        "sample": "06",
+        "baselineCount": 2,
+        "candidateCount": 2,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.30322265625,
+        "maxScoreError": 0.0011189579963684082
+      },
+      {
+        "sample": "07",
+        "baselineCount": 3,
+        "candidateCount": 3,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.404052734375,
+        "maxScoreError": 0.0019876956939697266
+      },
+      {
+        "sample": "08",
+        "baselineCount": 2,
+        "candidateCount": 2,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.220703125,
+        "maxScoreError": 0.00022453069686889648
+      },
+      {
+        "sample": "09",
+        "baselineCount": 1,
+        "candidateCount": 1,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.33935546875,
+        "maxScoreError": 0.0004093647003173828
+      },
+      {
+        "sample": "10",
+        "baselineCount": 3,
+        "candidateCount": 3,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.616424560546875,
+        "maxScoreError": 0.0019770264625549316
+      },
+      {
+        "sample": "11",
+        "baselineCount": 1,
+        "candidateCount": 1,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.1790771484375,
+        "maxScoreError": 0.0005140304565429688
+      },
+      {
+        "sample": "12",
+        "baselineCount": 1,
+        "candidateCount": 1,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.515625,
+        "maxScoreError": 0.0039258599281311035
+      },
+      {
+        "sample": "13",
+        "baselineCount": 2,
+        "candidateCount": 2,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.2105712890625,
+        "maxScoreError": 0.0006412863731384277
+      },
+      {
+        "sample": "14",
+        "baselineCount": 3,
+        "candidateCount": 3,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.6070556640625,
+        "maxScoreError": 0.0024983882904052734
+      },
+      {
+        "sample": "15",
+        "baselineCount": 2,
+        "candidateCount": 2,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.264892578125,
+        "maxScoreError": 0.0006729960441589355
+      },
+      {
+        "sample": "16",
+        "baselineCount": 2,
+        "candidateCount": 2,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.5926513671875,
+        "maxScoreError": 0.0003072023391723633
+      },
+      {
+        "sample": "17",
+        "baselineCount": 2,
+        "candidateCount": 2,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.156158447265625,
+        "maxScoreError": 0.000510096549987793
+      },
+      {
+        "sample": "18",
+        "baselineCount": 3,
+        "candidateCount": 3,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.46771240234375,
+        "maxScoreError": 0.0003501772880554199
+      },
+      {
+        "sample": "19",
+        "baselineCount": 1,
+        "candidateCount": 1,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.302001953125,
+        "maxScoreError": 0.0007168054580688477
+      },
+      {
+        "sample": "20",
+        "baselineCount": 2,
+        "candidateCount": 2,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.270721435546875,
+        "maxScoreError": 0.0005849599838256836
+      },
+      {
+        "sample": "21",
+        "baselineCount": 1,
+        "candidateCount": 1,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.1732177734375,
+        "maxScoreError": 2.8014183044433594e-06
+      },
+      {
+        "sample": "22",
+        "baselineCount": 3,
+        "candidateCount": 3,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.60333251953125,
+        "maxScoreError": 0.0006448030471801758
+      },
+      {
+        "sample": "23",
+        "baselineCount": 3,
+        "candidateCount": 3,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.712646484375,
+        "maxScoreError": 0.004665017127990723
+      },
+      {
+        "sample": "24",
+        "baselineCount": 0,
+        "candidateCount": 0,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0,
+        "maxScoreError": 0
+      },
+      {
+        "sample": "25",
+        "baselineCount": 1,
+        "candidateCount": 1,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.1224365234375,
+        "maxScoreError": 0.00011086463928222656
+      },
+      {
+        "sample": "26",
+        "baselineCount": 2,
+        "candidateCount": 2,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.4417724609375,
+        "maxScoreError": 0.009730935096740723
+      },
+      {
+        "sample": "27",
+        "baselineCount": 1,
+        "candidateCount": 1,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.53369140625,
+        "maxScoreError": 0.00010669231414794922
+      },
+      {
+        "sample": "28",
+        "baselineCount": 3,
+        "candidateCount": 3,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.448974609375,
+        "maxScoreError": 0.0017085075378417969
+      },
+      {
+        "sample": "29",
+        "baselineCount": 2,
+        "candidateCount": 2,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.318511962890625,
+        "maxScoreError": 0.0011989474296569824
+      },
+      {
+        "sample": "30",
+        "baselineCount": 1,
+        "candidateCount": 1,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.2015380859375,
+        "maxScoreError": 0.002209484577178955
+      },
+      {
+        "sample": "31",
+        "baselineCount": 1,
+        "candidateCount": 1,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.4019775390625,
+        "maxScoreError": 0.0008661150932312012
+      },
+      {
+        "sample": "32",
+        "baselineCount": 2,
+        "candidateCount": 2,
+        "sameClassAndCount": true,
+        "maxEdgeErrorPx": 0.324951171875,
+        "maxScoreError": 0.006926298141479492
+      }
+    ]
+  },
+  "tests": {
+    "suites": 35,
+    "passed": true
+  },
+  "validatedRuntimeVersion": "1.0.3.15",
+  "releaseNote": "Version and product naming only; runtime and model are identical to validated 1.0.3.15."
+}

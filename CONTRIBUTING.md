@@ -11,7 +11,7 @@ git lfs pull
 python3 scripts/test_extension.py
 ~~~
 
-Node.js 22とPython 3、Git LFSを使用します。npm依存関係のインストールは不要です。3個のONNXモデルはGit LFSで管理しています。
+Node.js 22とPython 3、Git LFSを使用します。npm依存関係のインストールは不要です。3個のTFLiteモデルはGit LFSで管理しています。
 
 ## Scope and checks
 
@@ -27,7 +27,7 @@ GitHub Actionsはpush・Pull Request時にテストとJavaScript構文を検証�
 
 Use Issues for bug reports and pull requests for changes. Original-code licensing is not yet selected; third-party licenses remain applicable.
 
-Install Node.js 22, Python 3 and Git LFS, fetch model weights with git lfs pull, then run python3 scripts/test_extension.py. No npm installation is required.
+Install Node.js 22, Python 3 and Git LFS, fetch the three TFLite model files with git lfs pull, then run python3 scripts/test_extension.py. No npm installation is required.
 
 Describe relevant validation in your PR. AI DOM changes need browser/provider details and manual verification notes. Model changes need detection/accuracy/timing comparisons and updated hash metadata. Do not commit credentials, profiles, comic images or generated ZIP files.
 

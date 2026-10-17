@@ -1,16 +1,12 @@
 Comic text and bubble detector
 Author: ogkalu
-https://huggingface.co/ogkalu/comic-text-and-bubble-detector
-Revision: 16e8a62
-File: detector_int8.onnx
-Model card license: Apache-2.0
-ONNX Runtime Web 1.23.2: MIT; see ORT-LICENSE.
+Source: https://huggingface.co/ogkalu/comic-text-and-bubble-detector
+Upstream revision: 16e8a62
+Model card license declaration: Apache-2.0; see MODEL-LICENSE.
 
-WebGPU model: detector.onnx (FP32), same author, revision 16e8a62, Apache-2.0.
-GPU runtime: ONNX Runtime Web 1.23.2 ort.webgpu.min.js with asyncify wasm module; MIT.
-
-Distribution modifications: bundled detector_fp32.onnx is a derivative with static 1x3x640x640 input, graph simplification, and raw score/box outputs. TopK/coordinate postprocessing is performed in JavaScript. See conversion/ and MODEL-OPTIMIZATION.json. CPU detector_int8.onnx is retained separately.
-
-CPU 1.1.12 derivative: detector_int8_static.onnx, static 1x3x640x640 input, integer-only shape folding, raw score/box outputs; trained weights unchanged. Original detector_int8.onnx retained in development folder, excluded from ZIP.
-
-1.1.13 GPU derivative: backbone and encoder weights/activations converted to FP16, explicit precision boundary casts; decoder, postprocessor and IO remain FP32. See GPU-MODEL-OPTIMIZATION.json. CPU INT8 model remains the 1.1.12 optimized derivative.
+Version 2.0 derives the bundled TensorFlow Lite graphs from the existing optimized FP32 model without retraining.
+Files: litert/detector_optimized.tflite, litert/detector_backbone.tflite, litert/detector_head.tflite.
+Input: float32 RGB NHWC [1,640,640,3], divided by 255. Outputs: class scores and normalized box coordinates.
+Changes include static shapes, compatible integer indexing and layout rewrites, optional split FP16/FP32 execution, FP16 shader tuning and opt-in partial INT8 GPU matrix kernels. Trained source weights are retained.
+Model hashes, precision choices and validation scope: ../TFLITE-OPTIMIZATION.json, ../TENSOR-RESULTS.json and ../MODEL.md.
+Runtime: LiteRT.js (@litertjs/core) 2.5.3, Google, Apache-2.0; see litert/LICENSE.

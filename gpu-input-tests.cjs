@@ -1,0 +1,8 @@
+const assert=require('node:assert/strict'),input=require('./gpu-input-core.js');
+globalThis.GPUTextureUsage={COPY_DST:1,TEXTURE_BINDING:2,RENDER_ATTACHMENT:4};
+let destroyed=0,shader,submitted=0,copies=[],dispatches=[];
+const texture={createView:()=>({}),destroy(){destroyed++;}};
+const device={createTexture:d=>{assert.deepEqual(d.size,[640,640]);return texture;},createShaderModule:d=>{shader=d.code;return {};},createComputePipeline:()=>({getBindGroupLayout:()=>({})}),createBindGroup:d=>{assert.equal(d.entries[1].resource.buffer,buffer);return {};},queue:{copyExternalImageToTexture:(a,b,c)=>copies.push({a,b,c}),submit(){submitted++;}},createCommandEncoder:()=>({beginComputePass:()=>({setPipeline(){},setBindGroup(){},dispatchWorkgroups:(...args)=>dispatches.push(args),end(){}}),finish:()=>({})})};
+const buffer={},gpu=input.create(device,buffer),bitmap={width:640,height:640};gpu.write(bitmap);gpu.write(bitmap);assert.equal(copies.length,2);assert.equal(copies[0].a.source,bitmap);assert.equal(copies[0].b.premultipliedAlpha,false);assert.equal(submitted,2);assert.deepEqual(dispatches,[[40,40],[40,40]]);assert.match(shader,/output\[i\+2u\]=c.b/);assert.throws(()=>gpu.write({width:320,height:640}),/寸法/);gpu.close();gpu.close();assert.equal(destroyed,1);assert.throws(()=>gpu.write(bitmap),/終了/);
+const broken={...device,createComputePipeline(){throw Error('compile');}};assert.throws(()=>input.create(broken,buffer),/compile/);assert.equal(destroyed,2,'Texture released when initialization fails');
+console.log('PASS: GPU input buffer binding, dimensions, dispatch, reuse, lifecycle and failed initialization cleanup');

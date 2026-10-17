@@ -1,126 +1,28 @@
-# Manga Translator 1.0.2
+# Manga Translator 2.0
 
-[日本語](README.md) · [Download](https://github.com/okinisu/manga-translator-extension/releases/latest) · [Testing](TESTING.md#english) · [Report a bug](https://github.com/okinisu/manga-translator-extension/issues/new/choose)
+A Chrome extension that detects comic text regions locally, sends numbered crops to the selected AI and displays the translation.
 
-A Chrome extension that detects text regions locally on NAVER WEBTOON, creates numbered crop collages, asks ChatGPT, Gemini or a provider connected through local Pi to read and translate them, and overlays the translations on the comic.
+Version 2.0 moves detection from ONNX Runtime to **TensorFlow Lite / LiteRT.js 2.5.3**. This is not the TensorFlow.js variant. It carries forward the validated 1.0.3.15 implementation, including AI automation, Gemini API, Pi, streaming updates, missing-ID retries, language selection and custom instructions.
 
-## Use at your own risk
+## Installation
 
-**Use this extension at your own risk and responsibility.** Check the terms of the AI services and content platforms you use, and ensure you have the necessary rights to the content. Translation accuracy, continued operation of automation, and account safety are not guaranteed.
+Download **manga-translator-2.0.0.zip** from the [latest release](https://github.com/okinisu/manga-translator-extension/releases/latest). Use the extension asset rather than GitHub's auto-generated source archives.
 
-## Free tiers and costs
+1. Extract the ZIP to a dedicated folder.
+2. Open `chrome://extensions`, enable Developer mode and load the folder containing `manifest.json`.
+3. Disable the older extension to prevent duplicate operation. Reload the extension and comic tab after updating.
+4. Review your AI provider, language and connection settings. See [PI.md](PI.md) for Pi setup.
 
-You can try supported connections without a paid subscription:
+## Inference settings
 
-- **Gemini API:** eligible models offer a Free Tier with model/project limits. Configure a Gemini API key in Pi, then select Pi and an image-capable Gemini model in the extension. The extension has no direct API-key input field.
-- **Codex and other providers through Pi:** Pi has no inference allowance of its own; it uses the connected service's free tier or existing subscription/API allowance. Codex is included in ChatGPT Free, subject to account availability and limits. Follow the [Pi setup guide](PI.md).
+Auto uses partial FP16 on validated AMD RDNA3 devices and FP32 on NVIDIA. Full FP16 is available on validated AMD RDNA3 and NVIDIA Lovelace devices with shader-f16 support. NVIDIA Lovelace full-FP16 mode includes the optimized FP16 cache and fused multiply-add path without requiring experimental subgroup-matrix features. Individual Tensor Core modes remain experimental. GPU failures fall back according to the selected backend; CPU mode uses LiteRT WASM FP32.
 
-Not every model listed by Pi is free. Paid API settings or subscription plans may incur charges. Eligibility and quotas can change; check [Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing), [Gemini API billing](https://ai.google.dev/gemini-api/docs/billing), [Codex plans and limits](https://learn.chatgpt.com/docs/pricing), and your account's current usage.
+## Validation
 
-## Install
+RTX 4060 Laptop / Linux Vulkan / Chrome beta 157, batch one, 640×640, three warmups, two independent four-image interleaved sessions: full-FP16 median response **36.03 → 29.21ms (18.9% shorter)** against 1.0.3.14. The measured 1.0.3.15 runtime is unchanged in 2.0.0. All 32 real fixtures preserve detection counts/classes against ONNX FP32; maximum box-edge difference is **0.713px**. This measures reference agreement, not human-labelled accuracy. Browser response timings include CPU fallback/readback and cannot be directly compared with official TensorRT timings. See [TENSOR-RESULTS.json](TENSOR-RESULTS.json) and [TESTING.md](TESTING.md).
 
-### Requirements and distribution differences
+See [MODEL.md](MODEL.md), [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), [PRIVACY.md](PRIVACY.md) and [CHANGELOG.md](CHANGELOG.md) for model, license, privacy and release details. Use is at your own responsibility.
 
-Use desktop Chrome and the complete extension folder, including model weights. A GPU is optional; CPU-only detection is supported. Node.js and Python are not required for browser-based translation. Pi integration requires Node.js 22.19+, Pi and the running bridge on the same PC as Chrome.
+## Source checkout
 
-Dedicated release ZIPs from v1.0.1 include the Pi bridge. The older v1.0.0 ZIP does not; update to the latest release to use Pi.
-
-### Release ZIP (includes Pi)
-
-Download and extract the dedicated extension ZIP from [Releases](https://github.com/okinisu/manga-translator-extension/releases/latest). In chrome://extensions, enable Developer mode, choose Load unpacked and select the extracted folder. Reload existing comic and AI pages.
-
-For updates, replace the files in the same folder currently loaded by Chrome, reload the extension, then reload comic and AI pages. Loading from another folder can create a separate extension with separate settings. See the [testing guide](TESTING.md#english).
-
-### Main branch source (includes Pi)
-
-Install Git and [Git LFS](https://git-lfs.com/), then run the following in a terminal. Shell examples use Linux/macOS bash or zsh:
-
-~~~sh
-git lfs install
-git clone https://github.com/okinisu/manga-translator-extension.git "$HOME/Downloads/manga-translator-extension"
-cd "$HOME/Downloads/manga-translator-extension"
-git lfs pull
-~~~
-
-In `chrome://extensions`, enable Developer mode and load `~/Downloads/manga-translator-extension`, the folder containing `manifest.json`, using Load unpacked. Opening `popup.html` as a local file does not run it as an extension. GitHub-generated source archives may contain model pointers; dedicated release ZIPs include actual model weights.
-
-For Windows PowerShell, use `"$HOME\Downloads\manga-translator-extension"` instead of `"$HOME/Downloads/manga-translator-extension"`, adjusting it to your actual checkout location.
-
-To update a source checkout, run the following from its root folder after saving or resolving any local changes:
-
-~~~sh
-git pull --ff-only
-git lfs pull
-~~~
-
-Reload the extension and comic/AI pages in Chrome. For Pi, stop the old bridge and restart it from the updated folder, then paste the newly generated Connection key into the extension.
-
-## Use
-
-For browser providers, sign in to ChatGPT or Gemini. For Pi, complete the [Pi setup](PI.md#english-setup) and start the bridge first. Open an episode on NAVER WEBTOON, select source/target languages, AI and batch mode, then click the automatic translation button. The first completed collage is submitted while the remaining images are prepared. When streaming text is available, complete items are previewed during generation and confirmed against the final reply. Missing IDs use retry collages of up to 12 regions, with at most three retries per ID. If IDs remain missing, translation stops while retaining accepted items. Manual image/prompt preparation and JSON import are also available.
-
-The AI is asked to return IDs and translations without source text. Legacy replies containing original text remain supported. Provisional overlays are not persisted and disappear on comic-page reload.
-
-## Settings
-
-- Japanese/English UI, selectable source/target languages.
-- Accuracy, balanced (default), or fewer-image batch modes.
-- Translation memory / custom instructions: up to 4,000 characters, saved automatically on this device across titles. Frozen when episode preparation starts, reused for all batches/retries. Clear the field to disable future use. Included in prompts to the selected AI. No automatic learning from previous translations.
-- ChatGPT temporary chat (default) or normal chat.
-- Pi connection key, image-capable model discovery/selection, and thinking level (Pi default or off through max). Supported levels depend on the model.
-- GPU with CPU fallback (default) or CPU only, FP32/partial FP16.
-- Graph Capture auto/off/on. Auto enables it only for AMD with partial FP16; failed startup checks retry without it. FP32 always uses Capture off.
-- Detection diagnostics. Browser providers also show mean/last response times in the AI panel; those statistics do not cover Pi requests.
-
-## Development
-
-Requires Node.js, Python 3 and Git LFS. Run the commands from the repository root.
-
-~~~sh
-git lfs pull
-python3 scripts/test_extension.py
-python3 scripts/package_extension.py --output dist
-~~~
-
-Includes 31 test suites plus JavaScript syntax checks. Tests cover simulated DOM/message flows, not every live AI-site behavior or model-accuracy case. AI site changes and account limits can interrupt automation.
-
-See [MODEL.md](MODEL.md), [PRIVACY.md](PRIVACY.md) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). No license has been selected for original code. Third-party licenses remain applicable. This is not an official ChatGPT, Gemini, NAVER or Chrome product. Service terms and content rights apply separately.
-
-Version 1.0.0 is the starting point of this repository history and public testing. Report problems through [Issues](https://github.com/okinisu/manga-translator-extension/issues/new/choose). See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidance.
-
-### Pi / Codex local connection
-
-Pi integration is included in dedicated release ZIPs from v1.0.1 and in the main branch source. The extracted folder contains `scripts/pi-bridge.mjs`.
-
-Install Node.js 22.19+ with npm, then run these commands from any terminal folder. See the [official Pi installation guide](https://github.com/earendil-works/pi#getting-started) for alternatives:
-
-~~~sh
-npm install -g --ignore-scripts @earendil-works/pi-coding-agent
-pi
-~~~
-
-Enter `/login` inside Pi and authenticate with your chosen provider. Then open another terminal and **change into this extension's root folder containing `manifest.json` and `scripts/`**. If you cloned it to `~/Downloads/manga-translator-extension`:
-
-~~~sh
-cd "$HOME/Downloads/manga-translator-extension"
-node scripts/pi-bridge.mjs
-~~~
-
-For Windows PowerShell, this absolute-path approach also works from any current directory. The extension script is not installed in the Node.js installation folder.
-
-~~~powershell
-$bridge = Join-Path $HOME 'Downloads\manga-translator-extension\scripts\pi-bridge.mjs'
-if (Test-Path -LiteralPath $bridge -PathType Leaf) {
-    node $bridge
-} else {
-    Write-Error "Extension script not found. Check your extraction folder: $bridge"
-}
-~~~
-
-Replace the `cd` or `$bridge` path with your actual clone/extraction folder, including its actual name (for example, `manga-translator-extension-main`). Startup automatically prints `Connection key: ...`; paste that key into the extension's Pi connection settings. This is separate from the provider's login code or API key. Keep the bridge terminal open during translation.
-
-[Complete Pi installation, login and connection-key guide](PI.md#english-setup)
-
-### Editing debug tools
-
-“プレビュー・位置修正（デバッグ用）” in advanced settings defaults to OFF. Normal translation builds images directly from source images and coordinates without intermediate crop PNGs. Enable it for region previews, selection, position editing, and adding missed regions. This setting is independent of timing diagnostics.
+The three TFLite model files use Git LFS. Install Git LFS and run `git lfs pull` in the repository root before loading or packaging a source checkout. Release ZIPs contain the actual model files.
